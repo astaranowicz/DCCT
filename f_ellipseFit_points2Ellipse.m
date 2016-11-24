@@ -17,7 +17,7 @@ function [x0,y0,a,b,alpha,phi, residual,outliers] = f_ellipseFit_points2Ellipse(
 % toleranceForRotation = 1e-5;
 sampleSize = 5; %number of points to describe an ellipse
 maxDataTrials = 400; %number of trials of trying to find a non-degenerate model before the code exits
-maxTrials = 700; %number of trials before the code exits
+maxTrials = 100; %number of trials before the code exits
 inliers = [];
 while length(inliers) < sampleSize
     %To pick the best fit to the number of points having no outliners

@@ -6,12 +6,12 @@ function DCCT_calibration_method(Switch,varargin)
 global DCCT_variables
 
 pause(0.05)
-if Switch == 1
-    load Data/DepthSpherePoints
-    load Data/RGBPixelcenters
-elseif Switch == 2
-    load Depth_userInput
-    load RGB_userInput
+if nargin >= 1 && Switch == 1
+    load Data/UserInput_Depth
+    load Data/UserInput_RGB
+elseif nargin >= 1 && Switch == 2
+    load UserInput_Depth
+    load UserInput_RGB
 else
     avg_depthPixelPoints = DCCT_variables.avg_depthPixelPoints;
     projected_sphere_center_RGB = DCCT_variables.projected_sphere_center_RGB;
@@ -39,7 +39,7 @@ end
 %% NLS
 display('Nonlinear Minimization Phase')
 display('6pnt Nonlinear Least Squares')
-Switch = 0; % 0 for weighted and 1 for non-weighted
+Switch = 1; % 0 for weighted and 1 for non-weighted
 Switch2 = 1; % 0 to minimize Kr,R,t and 1 to minimise Kd,R,t
 [Kd_C,R_C,t_C,Kr_C,RESNLS,inliers_6pnt_NLS] = f_sixPointConstraintFit2Points(Kd_hat, R_hat, t_hat,DCCT_variables.Kr, U_depth_inl(guessInliers(Inliers_6pnt)),...
     projected_sphere_center_RGB(guessInliers(Inliers_6pnt)),Ellipse_RGB(guessInliers(Inliers_6pnt)),Switch,Switch2);
@@ -57,7 +57,7 @@ Kr_D2=Kr_C;
 
 %% Residual 6pnt After NLS minimization
 display('Plots')
-figure
+figure(2)
 hold on
 title('Residual')
 for i = 1:length(guessInliers(Inliers_6pnt))
@@ -76,23 +76,6 @@ stdErr = std(err);
 %% Displays the Projected Conic
 Projected_Conic = f_Quadric2Conic(U_depth_inl,Kd_D2,Kr_D2,R_D2,t_D2);
 
-for i = DCCT_variables.setOfSpheres
-    selected_Conic = f_param2Conic_Ellipse(Ellipse_RGB(i).t(1),Ellipse_RGB(i).t(2),Ellipse_RGB(i).a,Ellipse_RGB(i).b,Ellipse_RGB(i).alpha);
-    
-    imageName = [DCCT_variables.dirExt,DCCT_variables.RGBImageName,num2str(i),DCCT_variables.fileExt];
-    imageRead = imread(imageName);
-    figure
-    imshow(imageRead);
-    hold on
-    check =  find(i == guessInliers(Inliers_6pnt));
-    if isempty(check) == 1
-        title(['Sphere ',num2str(i),'is outlier'])
-    else
-        title(['Sphere ',num2str(i),'is inlier'])
-    end
-    f_drawConic(Projected_Conic(i).conic,1,'b')
-    f_drawConic(selected_Conic,1,'g');
-end
 display(' ')
 display(' ')
 display(' ')
@@ -104,18 +87,35 @@ display('Extrinsic calibration parameters: R')
 display(num2str(R_C2))
 display('Extrinsic calibration parameters: t [meters]')
 display(num2str(t_C2))
-display(['Pixel Reprojection Error: ',num2str(meanErr),' +(-) ',num2str(stdErr), '(mean and standard deviation)' ])
+display(['Pixel Reprojection Error: ', num2str(meanErr), setstr(177), num2str(stdErr), '(mean and standard deviation)' ])
 display(' ')
 display(' ')
-userSaveRes = input('Do you want to save the calibration results: y,n [n]:  ','s');
-if ~isempty(strfind(userSaveRes,'y'))
+userSaveRes = lower(input('Do you want to save the calibration results: y,n [y]:  ','s'));
+if ~isempty(strfind(userSaveRes,'n'))
+    display('Not saving');
+else
     display('Saving');
     save('CalibrationResults','Kd_C2','Kr_C','R_C2','t_C2','err');
-else
-    display('Not saving');
+
+	for i = DCCT_variables.setOfSpheres
+		selected_Conic = f_param2Conic_Ellipse(Ellipse_RGB(i).t(1),Ellipse_RGB(i).t(2),Ellipse_RGB(i).a,Ellipse_RGB(i).b,Ellipse_RGB(i).alpha);
+
+		imageName = [DCCT_variables.dataPath,DCCT_variables.RGBImageName,num2str(i),DCCT_variables.fileExt];
+		imageRead = imread(imageName);
+		fighandle = figure(1);
+		imshow(imageRead);
+		hold on
+		check =  find(i == guessInliers(Inliers_6pnt));
+		if isempty(check) == 1
+			title(['Sphere ',num2str(i),'is outlier'])
+		else
+			title(['Sphere ',num2str(i),'is inlier'])
+		end
+		f_drawConic(Projected_Conic(i).conic,fighandle,'b')
+		f_drawConic(selected_Conic,fighandle,'g');
+		pause
+	end
 end
-
-
 
 end
 

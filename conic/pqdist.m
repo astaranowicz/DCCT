@@ -43,19 +43,19 @@ function [dst,X] = pqdist(Y, a, b, c)
 
 validateattributes(Y, {'numeric'}, {'2d'});
 if isvector(Y)  % a single point
-    validateattributes(Y, {'numeric'}, {'column'});
+    validateattributes(Y, {'numeric'}, {'column'}, mfilename, 'Y');
 end
 
 if nargin > 2
-    validateattributes(a, {'numeric'}, {'2d'});
+    validateattributes(a, {'numeric'}, {'2d'}, mfilename, 'A');
     A = a;
     dim = size(a,1);
     validateattributes(dim, {'numeric'}, {'>=', 2, '<=', 3});
-    validateattributes(a, {'numeric'}, {'2d','size',[dim,dim]});
-    validateattributes(b, {'numeric'}, {'column','size',[dim,1]});
-    validateattributes(c, {'numeric'}, {'scalar'});
+    validateattributes(a, {'numeric'}, {'2d','size',[dim,dim]}, mfilename, 'A');
+    validateattributes(b, {'numeric'}, {'column','size',[dim,1]}, mfilename, 'b');
+    validateattributes(c, {'numeric'}, {'scalar'}, mfilename, 'c');
 else
-    validateattributes(a, {'numeric'}, {'nonempty','vector'});
+    validateattributes(a, {'numeric'}, {'nonempty','vector'}, mfilename, 'p');
     p = a;
     switch numel(p)
         case 6  % quadratic curve, x^2 xy y^2 x y 1
@@ -74,6 +74,12 @@ else
         otherwise
             error('pqdist:DimensionMismatch', 'Unsupported parameter vector dimension numel(p) = %d.', numel(p));
     end
+end
+
+if rcond(A) < 1e-8  % degenerate quadratic curve/surface: line/plane
+    %dst = b' * Y + c;  % row vector of signed distances
+    %X = Y - b * dst;
+    %return;
 end
 
 [R,D] = eig(A);

@@ -132,7 +132,7 @@ function [M, inliers_out, outliers_out] = f_ransac_6Pnt(x,x2,Kr, fittingfn, dist
         count = 1;
         while degenerate
             % Generate s random indicies in the range 1..npts
-            ind = randsample(npts, s);
+            ind = randsample(npts, s, true);
 
             % Test that these points are not a degenerate configuration.
             degenerate = 0;

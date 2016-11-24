@@ -12,19 +12,17 @@ counter = 1;
 while counter ~= length(DCCT_variables.setOfSpheres)+1
     
     i = DCCT_variables.setOfSpheres(counter);
-    depthMapName = [DCCT_variables.dirExt,DCCT_variables.DepthMapName,num2str(i),DCCT_variables.fileExtDM];
-    DepthMap = load(depthMapName);
-    d = DepthMap(:,3); %in millimeters
-    %Reshapes the vector of distances in to a matrix
-    x3=reshape(d,640,480)';
+    depthMapName = [DCCT_variables.dataPath,DCCT_variables.DepthImageName,num2str(i),DCCT_variables.fileExt];
+    imageRead = imread(depthMapName);
     %Load image and get points
-    figure
-    imshow(x3,[]);
+    figure(1);
+    imshow(imageRead,[]);
     hold on
     title(char(['Depth Image of sphere ', num2str(i)],['Select a box around the sphere profile'], ['then press enter to continue']))
     %input for the edges of the selection box
     rectHandle = imrect;
-    pause
+    title(char(['Depth Image of sphere ', num2str(i)],['If you finished selecting the box, press enter']))
+    input('If you finished selecting the box, press enter','s');
     rect = rectHandle.getPosition;
     Txmin = floor(rect(1));
     Tymin = floor(rect(2));
@@ -35,8 +33,8 @@ while counter ~= length(DCCT_variables.setOfSpheres)+1
     %input to find the correct depth that the sphere is at
     depthFinder=[floor(rect(1)+(rect(3)/2)) floor(rect(2)+(rect(4)/2))];
     
-    xGLM=x3([Tymin:Tymax],[Txmin:Txmax]);
-    depth_click = x3(depthFinder(2),depthFinder(1));
+    xGLM=imageRead([Tymin:Tymax],[Txmin:Txmax]);
+    depth_click = imageRead(depthFinder(2),depthFinder(1));
     %Minimal distance that we can remove from the image
     Zmin = DCCT_variables.minDistanceFromCamera;
     %The center of the sphere plus some distance (in mm)
@@ -60,7 +58,9 @@ while counter ~= length(DCCT_variables.setOfSpheres)+1
     avg_depthPixelPoints(:,i) = [avgXdepth; avgYdepth; avgdepth];
     U_depth_clicked(i).points = Points_G;
     
-    userResStr = input('Is the current selection of points on the sphere ok: y,n [y]:  ','s');
+    figure(1);
+    title(char(['Depth Image of sphere ', num2str(i)],['Is the current selection of points on the sphere ok: y,n [y]']))
+    userResStr = lower(input('Is the current selection of points on the sphere ok: y,n [y]:  ','s'));
     
     if ~isempty(strfind(userResStr,'n'))
         clc
@@ -75,21 +75,20 @@ while counter ~= length(DCCT_variables.setOfSpheres)+1
     else
         maxDistanceFromCamera = 0.25;
         
-        DCCT_variables.avg_depthPixelPoints(:,counter) = avg_depthPixelPoints(:,counter);
-        DCCT_variables.U_depth_clicked(counter) = U_depth_clicked(counter);
+        DCCT_variables.avg_depthPixelPoints(:,i) = avg_depthPixelPoints(:,i);
+        DCCT_variables.U_depth_clicked(i) = U_depth_clicked(i);
         counter = counter+1;
     end
     close all
     
 end
 
-userSaveRes = input('Do you want to save this set: y,n [n]:  ','s');
-if ~isempty(strfind(userSaveRes,'y'))
-    display('Saving');
-    save('Depth_userInput','avg_depthPixelPoints','U_depth_clicked');
+userSaveRes = lower(input('Do you want to save this set: y,n [y]:  ','s'));
+if ~isempty(strfind(userSaveRes,'n'))
+	display('Not saving');
 else
-    display('Not saving');
+	display('Saving');
+	save('UserInput_Depth','avg_depthPixelPoints','U_depth_clicked');
 end
-
 
 end

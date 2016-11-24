@@ -14,7 +14,7 @@ D = Conic(1,3)*2;
 E = Conic(2,3)*2;
 F = Conic(3,3);
 
-imconic([A B C D E F],fighandle,color,[]);
+imconic([A B C D E F],get(fighandle,'CurrentAxes'),color,[]);
 
 end
 

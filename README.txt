@@ -45,9 +45,9 @@ The main script allows users to either run the data to obtain the calibration re
 
 The user can either use previously saved data from a past session of using DCCT or start with a new set of data.  If the user wants to collect the data from a new set of images, 2 more options will be shown which are:  the number of images to be used and where they are located on the disk.  Then the two functions (f_RGB_imageProcessing.m and f_Depth_imageProcessing.m) will be called to collect the data needed for the calibration.
 
-The function f_RGB_imageProcessing.m allows is used to process the RGB images obtained from a depth camera. 
+The function f_RGB_imageProcessing.m allows is used to process the RGB images obtained from an RGB camera. 
 
-The function works as follows:   The user will be asked to select a rectangle around the sphere (as close to the sphere’s perceived edge) and clicks inside the rectangle twice.  The cropped image will be processed by canny edge and hough transform for circles.  Usually only 1 circle is found, but in the case of multiple circles, the user will be asked to choose the best circle that will be processed.  The circle will have a band created around the edge pixels that belong to the sphere.  Those points are then used in an RANSAC-based ellipse fitting algorithm.  This estimated ellipse is then shown to the user and the user will either accept the estimated ellipse or start over with the same image.  The options will allow users to decrease or increase the threshold and sigma used by Canny Edge detection.  Note that in most cases the threshold needs to be decreased but the sigma can remain the default value.  The process starts again with the user selecting the rectangle around the sphere. 
+The function works as follows:   The user will be asked to select a rectangle around the sphere (as close to the sphere’s perceived edge) and then press enter on the keyboard.  The cropped image will be processed by canny edge and hough transform for circles.  Usually only 1 circle is found, but in the case of multiple circles, the user will be asked to choose the best circle that will be processed.  The circle will have a band created around the edge pixels that belong to the sphere.  Those points are then used in an RANSAC-based ellipse fitting algorithm.  This estimated ellipse is then shown to the user and the user will either accept the estimated ellipse or start over with the same image.  The options will allow users to decrease or increase the threshold and sigma used by Canny Edge detection.  Note that in most cases the threshold needs to be decreased but the sigma can remain the default value.  The process starts again with the user selecting the rectangle around the sphere. 
 
 NOTE:  A good estimated ellipse will as close as possible to the edge of the sphere.  A bad estimated ellipse would have a side far away from the edge of the sphere.
 
@@ -64,5 +64,5 @@ DCCT_variables_SetupScript.m is a set of default values used throughout the cali
 
 
 The data should be formatted in the following way:
-RGB images should be named RGBImage_ball_#.jpg
-Depth Maps should be named ball_#.txt (which includes the distance for each pixel in a column-wise vector which can be reshaped to match the RGB image.)
+RGB images should be named rgb#.png
+Depth Maps should be named depth#.png

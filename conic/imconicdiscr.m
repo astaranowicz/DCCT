@@ -8,5 +8,4 @@ function D = imconicdiscr(p)
 a = p(1);
 b = 0.5*p(2);
 c = p(3);
-
 D = det([ a b ; b c ]);

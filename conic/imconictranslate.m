@@ -4,7 +4,7 @@ function pt = imconictranslate(p, t)
 % Input arguments:
 % p:
 %    the parameter vector p = [a b c d f g]
-% theta:
+% t:
 %    the translation vector t = [x y]
 %
 % See also: imconictranslation, imconicrotate

@@ -84,7 +84,7 @@ elseif algorithm==3,
     % 1- Linear solution
      F0=f_Festim(U,Up,2); % [Up([1:2],1);1]'*F0*[U([1:2],1);1] %OK!    
     % 2- Nonlinear refinement 
-      options1  = optimset('LevenbergMarquardt','on','TolX',1e-6,'TolFun',1e-11,'Display','off'); %6 e 11
+      options1  = optimset('Algorithm','levenberg-marquardt','TolX',1e-6,'TolFun',1e-11,'Display','off'); %6 e 11
       global U Up;
       f0= f_stack(F0);
       a=fminunc(@sampson,f0,[],[],options1);

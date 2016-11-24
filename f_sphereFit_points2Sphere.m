@@ -16,7 +16,7 @@ function [center, radius, residual, inliers, outliers, indicesReal] = f_sphereFi
 
 sampleSize = 4; %number of points to describe an ellipse
 maxDataTrials = 600; %number of trials of trying to find a non-degenerate model before the code exits
-maxTrials = 1000; %number of trials before the code exits
+maxTrials = 2000; %number of trials before the code exits
 
 %To pick the best fit to the number of points having no outliners
 [AA, inliers,outliers,logicalIndices] = f_ransac_Elp_Sph(Points, @f_sphereLinLS, @f_sphereResidual, sampleSize, threshold,maxDataTrials, maxTrials);

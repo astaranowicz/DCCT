@@ -132,7 +132,7 @@ function [M, inliers, outliers, indicies] = f_ransac_Elp_Sph(x, fittingfn, distf
         count = 1;
         while degenerate
             % Generate s random indicies in the range 1..npts
-            ind = randsample(npts, s);
+            ind = randsample(npts, s, true);
 
 
             % Test that these points are not a degenerate configuration.

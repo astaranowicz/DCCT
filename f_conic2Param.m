@@ -35,7 +35,7 @@ else
     F = inConic(6);
 end
 %Converts the Conic vector of parameters to the Parametric form
-[~,a,b,R,t]  = imconic([A B C D E F],toleranceForImConic);
+[~,a,b,R,t]  = imconic([A B C D E F],gca,'r',[],toleranceForImConic);
  x = t(1);
  y = t(2);
  alpha_radians = atan2(R(2,1),R(2,2));

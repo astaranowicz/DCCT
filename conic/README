@@ -1,23 +1,43 @@
-Quadratic curves and quadric surfaces in implicit form
-Copyright 2010 Levente Hunyadi
+Fitting quadratic curves and surfaces
+by Levente Hunyadi
+ 
+03 Feb 2014 (Updated 22 Sep 2014)
+Fit ellipses, ellipsoids and other quadratic curves and surfaces to noisy data.
 
-Work with general quadratic curves and quadric surfaces given as implicit equation.
+Description	
+===========
+Generating points along an ellipse or ellipsoid, plotting ellipses and ellipsoids in various parametric representations, and fitting ellipses, ellipsoids or other quadratic curves and surfaces to noisy data occur frequently in fields such as computer vision, pattern recognition and system identification. 
+This toolbox provides a fairly comprehensive toolset of estimating quadratic curves and surfaces in an errors-in-variables context, with and without constraints. In addition to classical fitting methods such as least squares (with and without curve or surface normals), Taubin's method, direct ellipse fit by Fitzgibbon et al. [1] and direct ellipsoid fit by Qingde Li and John G. Griffiths [4], the toolbox features an estimation algorithm by the author [2,3], based on and extending the work of Istv?n Vajk and Jen? Hetthéssy [5]. The proposed quadratic curve and surface fitting algorithm combines direct fitting with a noise cancellation step, producing consistent estimates close to maximum likelihood but without iterations. 
+REFERENCES
 
-This submission facilitates working with quadratic curves (ellipse, parabola, hyperbola, etc.) and quadric surfaces (ellipsoid, elliptic paraboloid, hyperbolic paraboloid, hyperboloid, cone, elliptic cylinder, hyperbolic cylinder, parabolic cylinder, etc.) given with the general quadratic equation
-
-Q(x) = x' * A * x + b' * x + c = 0
-
-where a pseudo-MatLab notation has been used. A is a symmetric N-by-N matrix (N = 2 or N = 3 not necessarily invertible), b is an N-by-1 column vector, and c is a scalar. The parameter x is an N-by-1 column vector. Those points x that satisfy Q(x) = 0 comprise the quadratic curve or quadric surface.
-
-The package comprises of two major components.
-
-First, a set of functions is included for quadratic curves that identify the conic section and compute explicit parameters (semimajor axis, semiminor axis, rotation matrix, translation vector) of a conic section given with the general quadratic equation; or plot a conic section, returning a lineseries object (for circles, ellipses and parabolas) or a hggroup object (for hyperbolas).
-
-Second, the package contains an algorithm for computing the distance from a point in 2D to a general quadratic curve defined implicitly by a second-degree quadratic equation in two variables or from a point in 3D to a general quadric surface defined implicitly by a second-degree quadratic equation in three variables.
-
-Utility functions are included to manipulate matrices of symbolic variables that were used to pre-compute polynomials shipped with the package.
+[1] Andrew W. Fitzgibbon, Maurizio Pilu and Robert B. Fisher, "Direct Least Squares Fitting of Ellipses", IEEE Trans. PAMI 21, 1999, pp476-480. 
+[2] Levente Hunyadi, "Estimation methods in the errors-in-variables context", PhD dissertation, Budapest University of Technology and Economics, 2013. 
+[3] Levente Hunyadi and Istv?n Vajk, "Constrained quadratic errors-in-variables fitting", The Visual Computer, 12 pages, in print, available on-line from October 2013. 
+[4] Qingde Li and John G. Griffiths, "Least Squares Ellipsoid Specific Fitting", Proceedings of the Geometric Modeling and Processing, 2004. 
+[5] Istv?n Vajk and Jen? Hetthéssy, "Identification of nonlinear errors-in-variables models", Automatica 39, 2003, pp2099-2107.
 
 CONTACT INFORMATION
 
-Levente Hunyadi
+Levente Hunyadi 
 http://hunyadi.info.hu/
+
+Please use my private e-mail address to submit bug reports, which will be addressed upon short notice; reviews, however, are not monitored. Any feedback is most welcome.
+
+Acknowledgements	
+===========
+Quadratic Curves And Quadric Surfaces In Implicit Form and Symbolic Polynomials inspired this file.
+
+This file inspired Hyperellipsoidfit.
+
+Required Products
+===========
+Optimization Toolbox
+Symbolic Math Toolbox
+
+MATLAB release
+===========
+MATLAB 7.14 (R2012a)
+
+Other requirements
+===========
+This submission depends "Quadratic curves and quadric surfaces in implicit form" and "Symbolic polynomials" by the same author, both of which are included. Optimization Toolbox and Symbolic Math Toolbox are optional and required only by a few features.

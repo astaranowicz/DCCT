@@ -29,7 +29,7 @@ function F = f_grad(U,Up,F0)
     % ([Ud(:,1);1])'*F0*([Ua(:,1);1])
 
     %% trova a tale che minimizzi il funzionale di costo
-    options1  = optimset('LevenbergMarquardt','on','TolX',1e-6,'TolFun',1e-11,'Display','off'); %6 e 11
+    options1  = optimset('Algorithm','levenberg-marquardt','TolX',1e-6,'TolFun',1e-11,'Display','off'); %6 e 11
     global U Up nCols;
     a=lsqnonlin(@cost,f0,[],[],options1);
     %% calcola la F da l vettore a -> Note that the rank(2) constraint is
