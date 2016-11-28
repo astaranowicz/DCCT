@@ -1,11 +1,20 @@
 README FILE
 
 
-DCCT v.1.1 is a contribution that is part of the following paper:
-Journal Version:
+DCCT v.1.2 have been developed by Hamdi Sahloul <hamdisahloul@hotmail.com> from the orginal DCCT v.1.1 provided as a part of the following paper:
 Aaron N. Staranowicz, Garrett R. Brown, Fabio Morbidi, Gian-Luca Mariottini, Practical and accurate calibration of RGB-D cameras using spheres, Computer Vision and Image Understanding, Available online 9 April 2015, ISSN 1077-3142, http://dx.doi.org/10.1016/j.cviu.2015.03.013.
-Conference Version:
-A. Staranowicz, G.R. Brown, F. Morbidi, and G.L. Mariottini. Easyto-Use and Accurate Calibration of RGB-D Cameras from Spheres. In R. Klette, M. Rivera, and S. Satoh, editors, Proc. 6th Pacific-Rim Symposium on Image and Video Technology, volume 8333, pages 265–278. Springer, 2014. 
+
+DCCT v.1.2 introduces new features as following:
+- Provided a basic framework for developing distortion vector estimation
+- Option to directly capture from Kinect sensor
+- Depth maps are now U16C1 images instead of text files
+- Provided GUI option to edit ellipses
+- Semi-automatic depth selection
+- Sphere detection by color
+- Enhance Canny edge detector using adaptive thresholding
+- Ability to reload previous run data for edit and reply
+- Upgraded imconic toolbox
+
 
 %%%%%%%%%%%
 Please note that the feature selection is not user-friendly.  We are updating and testing the latest verison which is described in the above paper.  
@@ -34,12 +43,12 @@ This zipped file contains several toolboxes:
 
 
 The 4 main files are:
- DCCT_v1_1.m
+DCCT.m
 f_RGB_imageProcessing.m
 f_Depth_imageProcessing.m
 DCCT_variables_SetupScript.m
 
-The main script is called:  DCCT_v1_1.m   (which is the script to run in MATLAB)
+The main script is called:  DCCT.m   (which is the script to run in MATLAB)
 
 The main script allows users to either run the data to obtain the calibration results and some of the figures used in the paper, or to input users’ own images of spheres along with corresponding depth maps.  Users will follow the options in Matlab’s command window.  
 

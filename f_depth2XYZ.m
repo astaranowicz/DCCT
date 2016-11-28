@@ -2,12 +2,15 @@
 %Converts the pixel points to the 3D points
 %
 % Input - Kd - depth camera calibration matrix
+%         Dd - depth camera distortion vector
 %         ud - pixel points with form: [u,v,Z]
 %
 % Output - XYZ - 3D point in the depth camera
 %%
 
-function XYZ = f_depth2XYZ(Kd,ud)
+function XYZ = f_depth2XYZ(Kd,Dd,ud)
+
+%TODO: Utilize Dd
 
 Pd = [inv(Kd) zeros(3,1);
       zeros(1,3)  1];

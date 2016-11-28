@@ -1,11 +1,12 @@
 %%
-% minQuadric is the cost function: ||C*-PQ*P||  to minimize Kd, R, t
+% minQuadric is the cost function: ||C*-PQ*P||  to minimize Kd, Dd, R, t
 %
 %
-% Input - Local - X - set of parameters to be minimized contains: Kd,R,t
+% Input - Local - X - set of parameters to be minimized contains: Kd,Dd,R,t
 %         Global - U_depth_NLS - Depth camera, set of points on a sphere
 %                  Conic_RGB_NLS - RGB camera, ellipse parametric parameters
 %                  Kr_NLS - RGB camera calibration matrix
+%                  Dr_NLS - RGB camera distortion vector
 %
 % Output - F - residuals from the cost function
 %
@@ -13,23 +14,25 @@
 function F = f_minQuadric(X)
 
 
-global U_depth_NLS Conic_RGB_NLS Kr_NLS Kd_NLS
+global U_depth_NLS Conic_RGB_NLS Kr_NLS Dr_NLS Kd_NLS Dd_NLS
 
 % Depth camera calibration matrix
 Kd = [X(7) X(11)  X(9);
     0   X(8)  X(10);
     0    0     1];
 % Kd = Kd_NLS;
+Dd = [X(12) X(13) X(14) X(15) X(16)];
+% Dd = Dd_NLS;
 %R_R_D
 R = rotoz(X(1))*rotoy(X(2))*rotox(X(3));
 %R_t_D
 t = [X(4);X(5);X(6)];
-% P- projection matrix from paper excluding the Kd
+% P- projection matrix from paper excluding the Kd and Dd
 R_H_D = [R t];
 %% Sphere fit to a set of points to find the 3D center of the sphere
 for i = 1:length(U_depth_NLS)
     %Converts the pixel center of the sphere to the 3D point of the sphere
-    X_depth(i).points = f_depth2XYZ(Kd,U_depth_NLS(i).points);
+    X_depth(i).points = f_depth2XYZ(Kd,Dd,U_depth_NLS(i).points);
     % Linear Least Square to find the model of the sphere
     M = f_sphereLinLS(X_depth(i).points(1:3,:));
     centerSphere_hat(i).center = M(1:3);
@@ -51,6 +54,7 @@ for i = 1:length(U_depth_NLS)
     Q = [eye(3) -centerSphere_hat(i).center;
         -centerSphere_hat(i).center'  centerSphere_hat(i).center'*centerSphere_hat(i).center-radius_hat(i)^2];
     
+    %TODO: Utilize Dr_NLS
     temp_Conic = inv(Kr_NLS * R_H_D * inv(Q) * R_H_D' * Kr_NLS');
     [x_t,y_t,a_t,b_t,alpha_t] = f_conic2Param(temp_Conic,toleranceForImConic);
     %alpha_t is in radians

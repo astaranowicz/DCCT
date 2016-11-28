@@ -3,11 +3,13 @@
 % paper to run.
 %%
 
-DCCT_variables.setOfSpheres = [1:57]; %Number of spheres considered
+DCCT_variables.setOfSpheres = [1:25]; %Number of spheres considered
 DCCT_variables.Kd = []; %Depth sensor calibration matrix
+DCCT_variables.Dd = zeros(1, 5); %Depth sensor distortion vector
 DCCT_variables.Kr = [525     0  319.5;
                        0   525  239.5;
                        0     0      1]; %RGB sensor calibration matrix
+DCCT_variables.Dr = zeros(1, 5); %RGB sensor distortion vector
 DCCT_variables.R = []; %Extrinsic calibration parameter, rotation from D to R
 DCCT_variables.t = []; %Extrinisc calibration parameter, translation from D to R
 DCCT_variables.threshold_3D_Depth = .02; %threshold on DepthMap distance for Sphere fitting in meters

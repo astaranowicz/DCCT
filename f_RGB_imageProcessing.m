@@ -151,7 +151,7 @@ while counter ~= length(DCCT_variables.setOfSpheres)+1
 		Ellipse_RGB(i).alpha = alpha;
     end
         
-    projected_sphere_center_RGB(i).points = f_projectionSphere(Ellipse_RGB(i).t(1), Ellipse_RGB(i).t(2), Ellipse_RGB(i).a, Ellipse_RGB(i).b, Ellipse_RGB(i).alpha, DCCT_variables.Kr, DCCT_variables.ProjectSphereCentertolerance);
+    projected_sphere_center_RGB(i).points = f_projectionSphere(Ellipse_RGB(i).t(1), Ellipse_RGB(i).t(2), Ellipse_RGB(i).a, Ellipse_RGB(i).b, Ellipse_RGB(i).alpha, DCCT_variables.Kr, DCCT_variables.Dr, DCCT_variables.ProjectSphereCentertolerance);
     
     
     fighandle = figure(1);

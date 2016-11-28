@@ -8,7 +8,7 @@ function f_Depth_imageProcessing()
 
 global DCCT_variables
 counter = 1;
-rectRatio = 0.2;
+rectRatio = 0.15;
 redo = false;
 while counter ~= length(DCCT_variables.setOfSpheres)+1
     

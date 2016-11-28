@@ -35,12 +35,13 @@ R = rotoz(X(4))*rotoy(X(5))*rotox(X(6));
 Kr = [X(7) X(11) X(9);
        0   X(8) X(10);
        0    0   1];
+Dr = [X(12) X(13) X(14) X(15) X(16)];
    
 tolerance = 1e-8;
 %% Sphere fit to set of points to find 3D center of sphere
 for i = 1:length(U_depth_NLS)
     %Converts pixel center of sphere to 3D point
-    X_depth(i).points= f_depth2XYZ(Kd,U_depth_NLS(i).points);
+    X_depth(i).points= f_depth2XYZ(Kd,Dd,U_depth_NLS(i).points);
     %Sphere fitting for each sphere
     M = f_sphereLinLS(X_depth(i).points(1:3,:));
     centerSphere_hat(i).center = M(1:3);
@@ -48,7 +49,7 @@ for i = 1:length(U_depth_NLS)
     % Covariance factor which weight more the items closer than further
     % from the camera
     N(i)= norm(R*centerSphere_hat(i).center+t)^2;
-    ProjectedCenter_camera(i).point = f_projectionSphere(Ellipse_C(i).t(1), Ellipse_C(i).t(2), Ellipse_C(i).a, Ellipse_C(i).b, Ellipse_C(i).alpha, Kr,tolerance);
+    ProjectedCenter_camera(i).point = f_projectionSphere(Ellipse_C(i).t(1), Ellipse_C(i).t(2), Ellipse_C(i).a, Ellipse_C(i).b, Ellipse_C(i).alpha, Kr, Dr, tolerance);
 end
 %% Create Weights
 N_max = max(N);

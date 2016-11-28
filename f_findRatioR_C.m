@@ -6,6 +6,7 @@
 %         a,b - major, minor axis of the ellipse
 %         alpha  - the tilt of the ellipse
 %         K_camera - the calibration matrix of the camera
+%         D_camera - the distortion vector of the camera
 %
 %
 % Output - r_c - ratio of r^2/c^2
@@ -20,7 +21,9 @@
 %   Ax^2 + Bxy + Cy^2 + Dx + Ey + F = 0
 %%
 
-function  gamma_r = f_findRatioR_C(x0,y0,a,b,alpha, K_camera,tolerance)
+function  gamma_r = f_findRatioR_C(x0,y0,a,b,alpha, K_camera, D_camera, tolerance)
+
+%TODO: Utilize D_camera
 
 %Converts the Parametric form to the Conic
 Conic = f_param2Conic_Ellipse(x0,y0,a,b,alpha);

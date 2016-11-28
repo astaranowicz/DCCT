@@ -6,7 +6,7 @@
 %         R_K - RGB camera calibration matrix
 %
 % Output - M - structure that contains the estimated Kd, R, and t
-%                 Kd -  depth camera calibration
+%                 Kd -  depth camera calibration matrix
 %                 R - R_R_D - rotation from RGB camera to Depth Camera
 %                 t - R_t_D - translation from RGB camera to Depth Camera
 %%

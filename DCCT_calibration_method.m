@@ -28,7 +28,7 @@ guessInliers = DCCT_variables.setOfSpheres;
 
 %% 2) SphereFit (w/ est Kd) --> inliers_pnts(j)
 for j = DCCT_variables.setOfSpheres
-    X_depth(j).points = f_depth2XYZ(Kd_hat, U_depth_clicked(guessInliers(j)).points);
+    X_depth(j).points = f_depth2XYZ(Kd_hat, DCCT_variables.Dd, U_depth_clicked(guessInliers(j)).points);
     [centerSphere_hat(j).center, radiusSphere_hat(j), residualSphere_hat(j).res, inliers_est(j).points, outliers_est(j).points, ind_inlsphere(j).index] = ...
         f_sphereFit_points2Sphere(X_depth(j).points(1:3,:), DCCT_variables.threshold_3D_Depth);
     % Depth-map pnts without outliers
@@ -40,32 +40,33 @@ end
 display('Nonlinear Minimization Phase')
 display('6pnt Nonlinear Least Squares')
 Switch = 1; % 0 for weighted and 1 for non-weighted
-Switch2 = 1; % 0 to minimize Kr,R,t and 1 to minimise Kd,R,t
-[Kd_C,R_C,t_C,Kr_C,RESNLS,inliers_6pnt_NLS] = f_sixPointConstraintFit2Points(Kd_hat, R_hat, t_hat,DCCT_variables.Kr, U_depth_inl(guessInliers(Inliers_6pnt)),...
+Switch2 = 1; % 0 to minimize Kr,R,t and 1 to minimise Kd,Dd,R,t
+[Kd_C,Dd_C,R_C,t_C,Kr_C,Dr_C,RESNLS,inliers_6pnt_NLS] = f_sixPointConstraintFit2Points(Kd_hat, DCCT_variables.Dd, R_hat, t_hat,DCCT_variables.Kr,DCCT_variables.Dr, U_depth_inl(guessInliers(Inliers_6pnt)),...
     projected_sphere_center_RGB(guessInliers(Inliers_6pnt)),Ellipse_RGB(guessInliers(Inliers_6pnt)),Switch,Switch2);
 
 display('Quadric Nonlinear Least Squares')
 Switch = 1; % 0 for Kd,R,t and 1 for Kd
-[Kd_C2,R_C2,t_C2,RES_NLS] = f_QuadricNLS(Kd_C, Kr_C, Ellipse_RGB(guessInliers(Inliers_6pnt)),R_C,t_C,...
+[Kd_C2,Dd_C2,R_C2,t_C2,RES_NLS] = f_QuadricNLS(Kd_C, Dd_C, Kr_C, Dr_C, Ellipse_RGB(guessInliers(Inliers_6pnt)),R_C,t_C,...
     U_depth_inl(guessInliers(Inliers_6pnt)),Switch);
 
 inliers_6pnt_NLS2=inliers_6pnt_NLS;
 Kd_D2=Kd_C2;
+Dd_D2=Dd_C2;
 R_D2=R_C2;
 t_D2=t_C2;
 Kr_D2=Kr_C;
+Dr_D2=Dr_C;
 
 %% Residual 6pnt After NLS minimization
-display('Plots')
 figure(2)
 hold on
 title('Residual')
 for i = 1:length(guessInliers(Inliers_6pnt))
     %Calculates the projected sphere center
     j =(guessInliers(Inliers_6pnt(i)));
-    projected_sphere_center_inl_RGB_new(i).points = f_projectionSphere( Ellipse_RGB(j).t(1),  Ellipse_RGB(j).t(2),  Ellipse_RGB(j).a,  Ellipse_RGB(j).b,  Ellipse_RGB(j).alpha, Kr_D2,2);
+    projected_sphere_center_inl_RGB_new(i).points = f_projectionSphere( Ellipse_RGB(j).t(1),  Ellipse_RGB(j).t(2),  Ellipse_RGB(j).a,  Ellipse_RGB(j).b,  Ellipse_RGB(j).alpha, Kr_D2, Dr_D2, 2);
     
-    pnts(:,i) = f_residual6pntCostFunction(Kr_D2,Kd_D2,R_D2,t_D2,projected_sphere_center_inl_RGB_new(i), U_depth_inl(guessInliers(Inliers_6pnt(i))));
+    pnts(:,i) = f_residual6pntCostFunction(Kr_D2,Dr_D2,Kd_D2,Dd_D2,R_D2,t_D2,projected_sphere_center_inl_RGB_new(i), U_depth_inl(guessInliers(Inliers_6pnt(i))));
     plot(pnts(1,i),pnts(2,i),'rx');
     err(i) = norm(pnts(:,i));
 end
@@ -74,15 +75,24 @@ meanErr = mean(err);
 stdErr = std(err);
 
 %% Displays the Projected Conic
-Projected_Conic = f_Quadric2Conic(U_depth_inl,Kd_D2,Kr_D2,R_D2,t_D2);
+Projected_Conic = f_Quadric2Conic(U_depth_inl,Kd_D2,Dd_D2,Kr_D2,Dr_D2,R_D2,t_D2);
 
-display(' ')
+fprintf(2,'Distortion vectors estimation is not implemented yet!\n')
+fprintf(2,'If you are willing to address the distortion issue:\n')
+fprintf(2,'Kindly implement the missing routines indicated by the `TODO` comments.\n')
+fprintf(2,'Your kind efforts are highly appreciated!\n')
 display(' ')
 display(' ')
 display('Depth sensor calibration matrix')
 display(num2str(Kd_C2))
+display('Depth sensor distortion vector')
+display(num2str(Dd_C2))
+display(' ')
 display('RGB sensor calibration matrix')
 display(num2str(Kr_C))
+display('RGB sensor distortion vector')
+display(num2str(Dr_C))
+display(' ')
 display('Extrinsic calibration parameters: R')
 display(num2str(R_C2))
 display('Extrinsic calibration parameters: t [meters]')

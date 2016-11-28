@@ -1,11 +1,12 @@
 %%
-% minQuadric is the cost function: ||C*-PQ*P||  to minimize Kd
+% minQuadric is the cost function: ||C*-PQ*P||  to minimize Kd, Dd
 %
 %
-% Input - Local - X - set of parameters to be minimized contains: Kd parameters
+% Input - Local - X - set of parameters to be minimized contains: Kd,Dd
 %         Global - U_depth_NLS - Depth camera, set of points on a sphere
 %                  Conic_RGB_NLS - RGB camera, ellipse parametric parameters
 %                  Kr_NLS - RGB camera calibration matrix
+%                  Dr_NLS - RGB camera distortion vector
 %                  R_NLS - rotation from R_R_D
 %                  t_NLS - translation from R_t_D
 %
@@ -15,22 +16,23 @@
 
 function F = f_minQuadric_KD(X)
 
-global U_depth_NLS Conic_RGB_NLS Kr_NLS R_NLS t_NLS
+global U_depth_NLS Conic_RGB_NLS Kr_NLS Dr_NLS R_NLS t_NLS
 
 % Depth camera calibration matrix
 Kd = [X(1) X(5)  X(3);
     0   X(2)  X(4);
     0    0     1];
+Dd = [X(6) X(7) X(8) X(9) X(10)];
 %R_R_D
 R = R_NLS;
 %R_t_D
 t = t_NLS;
-% P- projection matrix from paper excluding the Kd
+% P- projection matrix from paper excluding the Kd and Dr
 R_H_D = [R t];
 %% Sphere fit to points to find the 3D center of the sphere
 for i = 1:length(U_depth_NLS)
     %Converts the pixel center of the sphere to the 3D point
-    X_depth(i).points = f_depth2XYZ(Kd,U_depth_NLS(i).points);
+    X_depth(i).points = f_depth2XYZ(Kd,Dd,U_depth_NLS(i).points);
     % Linear Least Squares to find the model of the sphere
     M = f_sphereLinLS(X_depth(i).points(1:3,:));
     centerSphere_hat(i).center = M(1:3);

@@ -36,7 +36,7 @@ end
 
 temp_KrRt = Kr*[R t];
 %Converts the pixels from the Depth Map to 3D points
-X_depth = f_depth2XYZ(Kd,centersOfSphere);
+X_depth = f_depth2XYZ(Kd,zeros(1, 5),centersOfSphere);
 %Uses the original 6pnt algorithm: ||u_r - Kr[R t]X_d||
 for i = 1:length(centersOfSphere)
     X_depth_temp = temp_KrRt * X_depth(:,i);
