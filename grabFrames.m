@@ -7,7 +7,7 @@ function grabFrames()
 
 global DCCT_variables
 
-strprompt = 'Enter directory to save images to (default - /Data):  ';
+strprompt = ['Enter directory to save images to (default: ', DCCT_variables.dataPath, '):  '];
 dataPath = input(strprompt, 's');
 if ~isempty(dataPath)
 	DCCT_variables.dataPath = dataPath;
@@ -53,8 +53,8 @@ while true
 	end
 	if shall_store == 's'
 		display(['Storying frame ', num2str(i), ' ...']);
-		imwrite(imgColor, [DCCT_variables.dataPath, DCCT_variables.RGBImageName, num2str(i), DCCT_variables.fileExt]);
-		imwrite(imgDepth, [DCCT_variables.dataPath, DCCT_variables.DepthImageName, num2str(i), DCCT_variables.fileExt]);
+		imwrite(imgColor, [DCCT_variables.dataPath, '/', DCCT_variables.RGBImageName, num2str(i), DCCT_variables.RGBFileExt]);
+		imwrite(imgDepth, [DCCT_variables.dataPath, '/', DCCT_variables.DepthImageName, num2str(i), DCCT_variables.depthFileExt]);
 
 		i = i + 1;
 	elseif shall_store == 'e'

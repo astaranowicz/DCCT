@@ -100,7 +100,7 @@ else
 	for i = DCCT_variables.setOfSpheres
 		selected_Conic = f_param2Conic_Ellipse(Ellipse_RGB(i).t(1),Ellipse_RGB(i).t(2),Ellipse_RGB(i).a,Ellipse_RGB(i).b,Ellipse_RGB(i).alpha);
 
-		imageName = [DCCT_variables.dataPath,DCCT_variables.RGBImageName,num2str(i),DCCT_variables.fileExt];
+		imageName = [DCCT_variables.dataPath, '/',DCCT_variables.RGBImageName,num2str(i),DCCT_variables.RGBFileExt];
 		imageRead = imread(imageName);
 		fighandle = figure(1);
 		imshow(imageRead);

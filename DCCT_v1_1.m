@@ -33,7 +33,7 @@ elseif userInput ==2
     clc
     display('User-input Data')
     display('  ')
-    prompt = 'Enter an RGB sensor calibration matrix (e.g., [525 0 319.5; 0 525 239.5; 0 0 1]) (default - uses Dataset):  ';
+    prompt = 'Enter an RGB sensor calibration matrix (e.g., [525 0 319.5; 0 525 239.5; 0 0 1]) (default: uses Dataset):  ';
     Kr = input(prompt);
     if ~isempty(Kr)
         DCCT_variables.Kr = Kr;
@@ -61,7 +61,7 @@ elseif userInput ==2
 			display('Enter at least three elements!')
 		end
         DCCT_variables.setOfSpheres = numOfImages;
-        strprompt = 'Enter directory to load images from (default - /Data):  ';
+        strprompt = ['Enter directory to load images from (default: ', DCCT_variables.dataPath, '):  '];
         dataPath = input(strprompt, 's');
         if ~isempty(dataPath)
             DCCT_variables.dataPath = dataPath;

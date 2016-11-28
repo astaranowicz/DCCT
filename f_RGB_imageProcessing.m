@@ -13,21 +13,18 @@ catch
 end
 
 counter = 1;
-cannyThreshold_croppedImage = 0.4;
-cannySigma_croppedImage = 0.15;
-
-cannyThreshold_Image = 0.15;
-cannySigma_Image = 0.25;
+cannyThreshold_Image = DCCT_variables.cannyThreshold_Image;
+cannySigma_Image = DCCT_variables.cannySigma_Image;
 
 redo = false;
 show_circles = false;
 %img_scale = 0.5;
-enlargment_ratio = 0.3;
+colorDetector_enlargmentRatio = 0.3;
 
 while counter ~= length(DCCT_variables.setOfSpheres)+1
     
     i = DCCT_variables.setOfSpheres(counter);
-    imageName = [DCCT_variables.dataPath,DCCT_variables.RGBImageName,num2str(i),DCCT_variables.fileExt];
+    imageName = [DCCT_variables.dataPath, '/',DCCT_variables.RGBImageName,num2str(i),DCCT_variables.RGBFileExt];
     image = imread(imageName);
     figure(1)
     imshow(image)
@@ -47,8 +44,8 @@ while counter ~= length(DCCT_variables.setOfSpheres)+1
 				if length(stats) > 0
 					rect = stats(1).BoundingBox;
 					%Make it a little bigger
-					rect(1:2) = rect(1:2) - enlargment_ratio * rect(3:4);
-					rect(3:4) = (1 + 2 * enlargment_ratio) * rect(3:4);
+					rect(1:2) = rect(1:2) - colorDetector_enlargmentRatio * rect(3:4);
+					rect(3:4) = (1 + 2 * colorDetector_enlargmentRatio) * rect(3:4);
 				end
 			end
 			if redo || length(stats) == 0
@@ -73,7 +70,7 @@ while counter ~= length(DCCT_variables.setOfSpheres)+1
 				redo = true;
 			end
 		end
-		BW = edge(AA_bin,'canny',cannyThreshold_croppedImage,cannySigma_croppedImage);
+		BW = edge(AA_bin,'canny',DCCT_variables.cannyThreshold_croppedImage,DCCT_variables.cannySigma_croppedImage);
 
 		if show_circles
 			figure(2);
@@ -158,41 +155,84 @@ while counter ~= length(DCCT_variables.setOfSpheres)+1
     
     
     fighandle = figure(1);
-    imshow(image);
-    hold on
-    title(char(['Estimated Ellipse on top of Image ',num2str(i)], ['Is the current ellipse ok: y,n [y]']));
-    Conic = f_param2Conic_Ellipse(Ellipse_RGB(i).t(1),Ellipse_RGB(i).t(2),Ellipse_RGB(i).a,Ellipse_RGB(i).b,Ellipse_RGB(i).alpha);
-    f_drawConic(Conic,fighandle,'r');
-    
-    userResStr = lower(input('Is the current ellipse ok: y,n [y]:  ','s'));
-    
-    if ~isempty(strfind(userResStr,'n'))
-        clc
-        display(['Redoing image number ',num2str(counter)]);
-        cannyThreshold_ImageResp = input('New Canny Threshold: (default: 0.15)  ');
-        if isempty(cannyThreshold_ImageResp)
-            cannyThreshold_Image = 0.15;
-        else
-            cannyThreshold_Image = cannyThreshold_ImageResp;
-        end
-        cannySigma_ImageResp = input('New Canny Sigma: (default: 0.25) ');
-        if isempty(cannySigma_ImageResp)
-            cannySigma_Image = 0.25;
-        else
-            cannySigma_Image = cannySigma_ImageResp;
-        end
-        houghCircles_Resp = lower(input('Show hough circles candicated to select: y,n [n]: ', 's'));
-        show_circles = ~isempty(strfind(houghCircles_Resp,'y'));
-        redo = true;
-    else
-        cannyThreshold_Image = 0.15;
-        cannySigma_Image = 0.25;
-        show_circles = false;
-        redo = false;
-        
-        DCCT_variables.Ellipse_RGB(i) = Ellipse_RGB(i);
-        DCCT_variables.projected_sphere_center_RGB(i) = projected_sphere_center_RGB(i);
-        counter = counter + 1;
+    display('Is the current ellipse ok: y,n [y]:  ')
+    key_speed_factor = 1;
+    key_last = 'y';
+    key_repeat = 0;
+    while true
+		imshow(image);
+		hold on
+		title(char(['Estimated Ellipse on top of Image ',num2str(i)], ['Is the current ellipse ok: y,n [y]'], [''], ['You can move the ellipse using arrow keys or w/a/s/d/z/x'], ['You can resize it using u/j/i/k, or rotate it using o/l']));
+		Conic = f_param2Conic_Ellipse(Ellipse_RGB(i).t(1),Ellipse_RGB(i).t(2),Ellipse_RGB(i).a,Ellipse_RGB(i).b,Ellipse_RGB(i).alpha);
+		f_drawConic(Conic,fighandle,'r');
+
+		wlock = waitforbuttonpress;
+		if wlock
+			opt = lower(get(gcf, 'CurrentCharacter'));
+			if opt == key_last
+				key_repeat = key_repeat + 1;
+				if key_repeat > 5
+					key_speed_factor = 2 * key_speed_factor;
+					key_repeat = 0;
+				end
+			else
+				key_repeat = 0;
+				key_speed_factor = 1;
+			end
+			key_last = opt;
+		end
+				
+		if opt == 'w' || opt == setstr(30)
+			Ellipse_RGB(i).t(2) = Ellipse_RGB(i).t(2) - key_speed_factor;
+		elseif opt == 'z' || opt == 'x' || opt == setstr(31)
+			Ellipse_RGB(i).t(2) = Ellipse_RGB(i).t(2) + key_speed_factor;
+		elseif opt == 'a' || opt == setstr(28)
+			Ellipse_RGB(i).t(1) = Ellipse_RGB(i).t(1) - key_speed_factor;
+		elseif opt == 's' || opt == 'd' || opt == setstr(29)
+			Ellipse_RGB(i).t(1) = Ellipse_RGB(i).t(1) + key_speed_factor;
+		elseif opt == 'u'
+			Ellipse_RGB(i).a = Ellipse_RGB(i).a + key_speed_factor;
+		elseif opt == 'j'
+			Ellipse_RGB(i).a = Ellipse_RGB(i).a - key_speed_factor;
+		elseif opt == 'i'
+			Ellipse_RGB(i).b = Ellipse_RGB(i).b + key_speed_factor;
+		elseif opt == 'k'
+			Ellipse_RGB(i).b = Ellipse_RGB(i).b - key_speed_factor;
+		elseif opt == 'o'
+			Ellipse_RGB(i).alpha = Ellipse_RGB(i).alpha + degtorad(key_speed_factor);
+		elseif opt == 'l'
+			Ellipse_RGB(i).alpha = Ellipse_RGB(i).alpha - degtorad(key_speed_factor);
+		elseif opt == 'y' || opt == setstr(10) || opt == setstr(13)
+			cannyThreshold_Image = DCCT_variables.cannyThreshold_Image;
+			cannySigma_Image = DCCT_variables.cannySigma_Image;
+			show_circles = false;
+			redo = false;
+
+			DCCT_variables.Ellipse_RGB(i) = Ellipse_RGB(i);
+			DCCT_variables.projected_sphere_center_RGB(i) = projected_sphere_center_RGB(i);
+			counter = counter + 1;
+			break;
+		elseif opt == 'n'
+			clc;
+			commandwindow;
+			display(['Redoing image number ',num2str(counter)]);
+			cannyThreshold_ImageResp = input(['New Canny Threshold: (default: ', num2str(DCCT_variables.cannyThreshold_Image), ')  ']);
+			if isempty(cannyThreshold_ImageResp)
+				cannyThreshold_Image = DCCT_variables.cannyThreshold_Image;
+			else
+				cannyThreshold_Image = cannyThreshold_ImageResp;
+			end
+			cannySigma_ImageResp = input(['New Canny Sigma: (default: ', num2str(DCCT_variables.cannySigma_Image), ') ']);
+			if isempty(cannySigma_ImageResp)
+				cannySigma_Image = DCCT_variables.cannySigma_Image;
+			else
+				cannySigma_Image = cannySigma_ImageResp;
+			end
+			houghCircles_Resp = lower(input('Show hough circles candicated to select: y,n [n]: ', 's'));
+			show_circles = ~isempty(strfind(houghCircles_Resp,'y'));
+			redo = true;
+			break;
+    	end
     end
     
     close all

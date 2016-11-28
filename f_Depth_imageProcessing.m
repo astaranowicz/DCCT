@@ -8,11 +8,12 @@ function f_Depth_imageProcessing()
 
 global DCCT_variables
 counter = 1;
-
+rectRatio = 0.2;
+redo = false;
 while counter ~= length(DCCT_variables.setOfSpheres)+1
     
     i = DCCT_variables.setOfSpheres(counter);
-    depthMapName = [DCCT_variables.dataPath,DCCT_variables.DepthImageName,num2str(i),DCCT_variables.fileExt];
+    depthMapName = [DCCT_variables.dataPath, '/',DCCT_variables.DepthImageName,num2str(i),DCCT_variables.depthFileExt];
     imageRead = imread(depthMapName);
     %Load image and get points
     figure(1);
@@ -20,10 +21,18 @@ while counter ~= length(DCCT_variables.setOfSpheres)+1
     hold on
     title(char(['Depth Image of sphere ', num2str(i)],['Select a box around the sphere profile'], ['then press enter to continue']))
     %input for the edges of the selection box
-    rectHandle = imrect;
-    title(char(['Depth Image of sphere ', num2str(i)],['If you finished selecting the box, press enter']))
-    input('If you finished selecting the box, press enter','s');
-    rect = rectHandle.getPosition;
+    if ~redo
+		xStart = max(1, DCCT_variables.projected_sphere_center_RGB(i).points(1) - rectRatio * size(imageRead, 2));
+		yStart = max(1, DCCT_variables.projected_sphere_center_RGB(i).points(2) - rectRatio * size(imageRead, 1));
+		xLen = min(size(imageRead, 2) - xStart, 2 * rectRatio * size(imageRead, 2));
+		yLen = min(size(imageRead, 1) - yStart, 2 * rectRatio * size(imageRead, 1));
+		rect = [xStart, yStart, xLen, yLen];
+	else
+		rectHandle = imrect;
+		title(char(['Depth Image of sphere ', num2str(i)],['If you finished selecting the box, press enter']))
+		input('If you finished selecting the box, press enter','s');
+		rect = rectHandle.getPosition;
+	end
     Txmin = floor(rect(1));
     Tymin = floor(rect(2));
     Txmax = floor(rect(1)+rect(3));
@@ -65,19 +74,21 @@ while counter ~= length(DCCT_variables.setOfSpheres)+1
     if ~isempty(strfind(userResStr,'n'))
         clc
         display(['Redoing image number ',num2str(counter)]);
-        depth_ImageResp = input('New Maximum Distance Threshold: (default: 300 millimeters)  ');
+        depth_ImageResp = input(['New Maximum Distance Threshold: (default: ', num2str(DCCT_variables.maxDistanceFromCamera), ' millimeters)  ']);
         
         if isempty(depth_ImageResp)
-            maxDistanceFromCamera = 0.25;
+            maxDistanceFromCamera = DCCT_variables.maxDistanceFromCamera;
         else
             maxDistanceFromCamera = depth_ImageResp;
         end
+        redo = true;
     else
-        maxDistanceFromCamera = 0.25;
+        maxDistanceFromCamera = DCCT_variables.maxDistanceFromCamera;
         
         DCCT_variables.avg_depthPixelPoints(:,i) = avg_depthPixelPoints(:,i);
         DCCT_variables.U_depth_clicked(i) = U_depth_clicked(i);
         counter = counter+1;
+        redo = false;
     end
     close all
     
