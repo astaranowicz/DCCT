@@ -96,7 +96,7 @@ function [q,Xhmir] = f_panproj(X,H,K,a,b,quadric,col)
        quadric=1;
        col = 'r.';
    elseif nargin==6
- 
+       col = 'r.';
    elseif nargin>7
        display('  EGT error: too many inputs in f_panproj')
    end;
@@ -150,7 +150,6 @@ Xhmat = [Rmir_mat    tmir_mat;
             [0 0 0]     1    ]*Xhmir;  % i.e., Xhmat = Rmat_mir*Xhmir+tmat_mir
 
 % PLOT
-if exist('col')~=0,
     for i=1:length(X(1,:)),
         plot3(X(1,i),X(2,i),X(3,i),strcat(col,'*'));
         plot3(Xhmat(1,i),Xhmat(2,i),Xhmat(3,i),strcat(col,'.'));
@@ -163,4 +162,4 @@ if exist('col')~=0,
         end
         plot3([X(1,i) t(1)],[X(2,i) t(2)],[X(3,i) t(3)],strcat(col2,':'));
     end
-end;
+

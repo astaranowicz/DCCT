@@ -4,11 +4,11 @@
 %%                                       %%
 %%%%%%%% DII- University of Siena %%%%%%%%%
 %
-% function U=f_perspproj(X,H,K,adjplot);
+% function [ucam,vcam]=f_perspproj(U,H,K,adjplot);
 %
 % Syntax:
 % ------
-%    X = "matrix of points in 3d scene" (see manual) (can be also in homogeneous notation)
+%    U = "matrix of points in 3d scene" (see manual) (can be also in homogeneous notation)
 %    H = "Homogeneous matrix containing rotation R and translation t w.r.t. the world frame."
 %    K = "Internal Parameters of the camera"
 %    adjplot = 0 - "do not plot nothing"
@@ -18,7 +18,7 @@
 %
 % Descr: 
 % ----- This function computes the perspective projection of a set of feature points 
-%       X expressed in the world-frame.
+%       U expressed in the world-frame.
 % 
 % Ex:
 % --
@@ -29,7 +29,7 @@
 %     f_3Dwf('k',3,'_{wf}'); f_scenepnt(P,'r*');             
 %     Rd=rotoy(0); td=[0,-10,0]'; Hd=f_Rt2H(Rd,td);     
 %     f_3Dframe(Hd,'b:',3,'_{c}'); f_3Dcamera(Hd,'b',1);     
-%     Ud=f_perspproj(P,Hd,Kd,2);
+%     [ud,vd]=f_perspproj(P,Hd,Kd,2);
 %     title('Epipolar Geometry Toolbox - Example 3 - Perspective Projection');
 %     figure(2); plot(ud,vd,'gO'); grid on;
 %     title('Epipolar Geometry Toolbox - Example 3 - Image plane');
@@ -37,10 +37,9 @@
 % Author:
 %    Gian Luca Mariottini 
 % Last Update:
-%    July 2008
-%      - two for cycles are joined for faster running
+%    December 2004
 %
-function U=f_perspproj(U,H,K,adjplot);
+function [u,v]=f_perspproj(U,H,K,adjplot);
 
 if nargin==3,
     plottatutto=0;
@@ -57,40 +56,30 @@ end;
       else
           Uo=U;
       end
-            
+      
+      %Points must be firstly transformed in the egt frame
+      for i=1:length(Uo(1,:)),
+          Uoegt([1:4],i)=[Uo([1:3],i) ; 1];
+      end
+
       Rw2i=R';
       tw2i=-Rw2i*t;
-      
-%       for i=1:length(Uo(1,:)),
-%           projpnt(:,i)=K*[Rw2i tw2i]*[Uo([1:3],i) ; 1]; %Points must be firstly transformed in the egt frame
-%           projpntnorm(1,i)=projpnt(1,i)/projpnt(3,i);
-%           projpntnorm(2,i)=projpnt(2,i)/projpnt(3,i);
-%           projpntnorm(3,i)=projpnt(3,i)/projpnt(3,i);
-%             if plottatutto==2,
-%                 Pc(:,i)=[Rw2i tw2i]*[Uo([1:3],i) ; 1];
-%                 plot3([t(1) U(1,i)],[t(2) U(2,i)],[t(3) U(3,i)],'r:');  
-%             end;  
-%       end;
-
-          P=K*[Rw2i tw2i];
-          n=length(Uo(1,:));
-          projpnt([1:3],:)=P*[Uo([1:3],:) ; ones(1,n)]; %Points must be firstly transformed in the egt frame
-          u=projpnt(1,:)./projpnt(3,:);
-          v=projpnt(2,:)./projpnt(3,:);
-            if plottatutto==2,
-                Pc([1:3],:)=[Rw2i tw2i]*[Uo([1:3],:) ; ones(1,n)];
-                for i=1:n
-                    plot3([t(1) U(1,i)],[t(2) U(2,i)],[t(3) U(3,i)],'r:');  
-                end
-            end;
-            U=[u;
-               v];
-            
-            
-%       u=projpntnorm(1,:);
-%       v=projpntnorm(2,:);
+      projpnt=K*[Rw2i tw2i]*Uoegt;
+      for i=1:length(projpnt(1,:)),
+          projpntnorm(1,i)=projpnt(1,i)/projpnt(3,i);
+          projpntnorm(2,i)=projpnt(2,i)/projpnt(3,i);
+          projpntnorm(3,i)=projpnt(3,i)/projpnt(3,i);
+      end;
+      u=projpntnorm(1,:);
+      v=projpntnorm(2,:);
       
       % Plot of lines joining camera and 3D features
-        
+      if plottatutto==2,
+          Pc=[Rw2i tw2i]*Uoegt;
+          Pcm=R;
+          for i=1:length(U(1,:)),
+              plot3([t(1) U(1,i)],[t(2) U(2,i)],[t(3) U(3,i)],'r:');
+          end;    
+      end;    
           
           

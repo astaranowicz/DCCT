@@ -31,12 +31,12 @@
 %      f_3Dwf('b',4);    
 %      f_scenepnt(P,'r*',1); f_3Dwfenum(P,'k',.5);
 %
-% Gian Luca Mariottini - March 2008
+% Gian Luca Mariottini - January 2005
 
 function f_scenepnt(P,color,plotta);
 
 %Per disomogeneizzare i punti
-if length(P(:,1))==4, %allora è in forma omogenea...
+if length(P(1,:))==4, %allora è in forma omogenea...
     Pno=P([1:3],:);
 else
     Pno=P;

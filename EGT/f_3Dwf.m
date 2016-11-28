@@ -52,23 +52,16 @@ end;
     Ywf=scale*[0,1,0]';
     Zwf=scale*[0,0,1]';
 
-%Plot del sistema di riferimento camera (Gian)
- plot3([Owf(1),Xwf(1)],[Owf(2),Xwf(2)],[Owf(3),Xwf(3)],color)
- plot3([Owf(1),Ywf(1)],[Owf(2),Ywf(2)],[Owf(3),Ywf(3)],color)
- plot3([Owf(1),Zwf(1)],[Owf(2),Zwf(2)],[Owf(3),Zwf(3)],color)
- col=strcat(color,'>');
- plot3(Xwf(1),Xwf(2),Xwf(3),col);
- col=strcat(color,'V');
- plot3(Ywf(1),Ywf(2),Ywf(3),col);
- col=strcat(color,'^');
- plot3(Zwf(1),Zwf(2),Zwf(3),col);
-
-%%% Inizio modifica Fabio plot frecce %%%
-%hold on
-%quiver3(Owf(1),Owf(2),Owf(3),Xwf(1),0,0,color);
-%quiver3(Owf(1),Owf(2),Owf(3),0,Ywf(2),0,color);
-%quiver3(Owf(1),Owf(2),Owf(3),0,0,Zwf(3),color);
-%%% Fine modifica Fabio plot frecce %%%
+%Plot del sistema di riferimento camera
+plot3([Owf(1),Xwf(1)],[Owf(2),Xwf(2)],[Owf(3),Xwf(3)],color)
+plot3([Owf(1),Ywf(1)],[Owf(2),Ywf(2)],[Owf(3),Ywf(3)],color)
+plot3([Owf(1),Zwf(1)],[Owf(2),Zwf(2)],[Owf(3),Zwf(3)],color)
+col=strcat(color,'>');
+plot3(Xwf(1),Xwf(2),Xwf(3),col);
+col=strcat(color,'V');
+plot3(Ywf(1),Ywf(2),Ywf(3),col);
+col=strcat(color,'^');
+plot3(Zwf(1),Zwf(2),Zwf(3),col);
 
 text(Xwf(1),Xwf(2),Xwf(3),strcat('X',axislabel))
 text(Ywf(1),Ywf(2),Ywf(3),strcat('Y',axislabel))

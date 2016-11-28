@@ -107,7 +107,7 @@ if detA~=0
         u = R01(1,:)*[u1;v1;ones(1,length(u1))];
         v = R01(2,:)*[u1;v1;ones(1,length(u1))];
           plot(u,v,color);
-        flag = -1;
+
         u1neg = -u2+u01; 
         uneg = R01(1,:)*[u1neg;v1;ones(1,length(u1))]; 
         vneg = R01(2,:)*[u1neg;v1;ones(1,length(u1))];
@@ -120,7 +120,7 @@ if detA~=0
         u = R01(1,:)*[u1;v1;ones(1,length(u1))];
         v = R01(2,:)*[u1;v1;ones(1,length(u1))];
           plot(u,v,color);         
-        flag = -1;
+
     end
 else
         disp('  EGT Warning: singular conic defined by the matrix')

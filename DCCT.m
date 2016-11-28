@@ -8,7 +8,7 @@
 % Please see the README File
 %
 %%
-addpath('EGT_v2p0/')
+addpath('EGT/')
 addpath('Data/')
 addpath('conic/')
 

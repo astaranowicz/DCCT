@@ -61,16 +61,7 @@ function [ea,ed,F]=f_epipole(Ha,Hd,Ka,Kd)
     F=inv(Kd)'*E*inv(Ka);
     
     ea=null(F);
-    if ea(3)~=0,
-      ea=ea/ea(3);
-    else
-      display('EGT error: f_epipole has the epipole ea at infty (with ea(3)=0)');
-    end
-    
+    ea=ea/ea(3);
     ed=null(F');
-    if ed(3)~=0,
-      ed=ed/ed(3);
-    else
-      display('EGT error: f_epipole has the epipole ed at infty (with ed(3)=0)');
-    end
+    ed=ed/ed(3);
     

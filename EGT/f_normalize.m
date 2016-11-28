@@ -26,21 +26,36 @@ npunti=length(U(1,:));
     cu=sum(U(1,:))/npunti;
     cv=sum(U(2,:))/npunti;
 %2] Scaling factor
-    
-	Usc([1:2],:)=U([1:2],:)-[cu;cv]*ones(1,npunti);
-    
-    %Adesso che hai scalato i punti nel centroide calcolane la norma    
-    NORMAtot=sqrt(Usc(1,:)*Usc(1,:)' + Usc(2,:)*Usc(2,:)')/npunti; 
-    
+    for i=1:npunti,
+	    Usc(:,i)=U(:,i)-[cu,cv]';
+    end,
+    %Adesso che hai scalato i punti nel centroide calcolane la norma
+    for i=1:npunti,
+        NORMA(i)=norm(Usc(1:2,i));   
+    end,
+    NORMAtot=sum(NORMA)/npunti; 
     t=sqrt(2)/NORMAtot;
     T=[t,0,-t*cu;
        0,t,-t*cv;
        0,0,   1];   
-    
-        Uo([1:3],:)=[U(1,:) ; U(2,:) ; ones(1,npunti)];
-    
+    for i=1:npunti,
+        Uo([1:3],i)=[U(1,i) ; U(2,i) ; 1];
+    end;
     
     Unormsco=T*Uo;   %la T lavora sui punti non traslati nel centroide  
     Unormsc([1,2],:)=[Unormsco(1,:);Unormsco(2,:)];
+    
+    %% Decomment this block to see centroid and distance between trasformed
+    %% point values
+    %%
+    %
+    %
+    %display('Mean distance from center is...')
+    %for i=1:npunti,
+    %    NORMAnorm(i)=norm(Unormsc(1:2,i));
+    %end,
+    %distanzammediaFINALE=sum(NORMAnorm)/npunti
+    %centroideFINALE=[sum(Unormsc(1,:))/npunti;
+    %                 sum(Unormsc(2,:))/npunti]
     
     

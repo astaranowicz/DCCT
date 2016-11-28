@@ -93,6 +93,7 @@ A= [ -4*s^2*a^2*e^2+p^2*b^4  ,      p*q*b^4          ,    p*s*b^2*(-2*e^2+b^2) ;
        p*s*b^2*(b^2-2*e^2)   , q*s*b^2*(b^2-2*e^2)   ,              s^2*b^4   ];
 end;   
 A2 = inv(K)'*Rc*A*Rc'*inv(K);
+A22 = A2;
 A22=A2/max(max(A2)); %Altrimenti sbaglia un po'...non so bene perche'!
 
 flag = f_conics(A22,color,passo,ampiezza);

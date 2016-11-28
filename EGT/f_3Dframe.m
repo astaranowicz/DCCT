@@ -74,8 +74,7 @@ plot3([Oc1(1),Xc1(1)],[Oc1(2),Xc1(2)],[Oc1(3),Xc1(3)],color)
 plot3([Oc1(1),Yc1(1)],[Oc1(2),Yc1(2)],[Oc1(3),Yc1(3)],color)
 plot3([Oc1(1),Zc1(1)],[Oc1(2),Zc1(2)],[Oc1(3),Zc1(3)],color)
 col=strcat(color,'>');
-%plot3(Xc1(1),Xc1(2),Xc1(3),col);
-quiver3(Xc1(1),Xc1(2),Xc1(3),S)
+plot3(Xc1(1),Xc1(2),Xc1(3),col);
 col=strcat(color,'V');
 plot3(Yc1(1),Yc1(2),Yc1(3),col);
 col=strcat(color,'^');

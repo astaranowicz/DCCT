@@ -14,7 +14,7 @@ DCCT v.1.2 introduces new features as following:
 - Enhance Canny edge detector using adaptive thresholding
 - Ability to reload previous run data for edit and reply
 - Upgraded imconic toolbox
-
+- Upgraded Epipolar Geometry toolbox
 
 %%%%%%%%%%%
 Please note that the feature selection is not user-friendly.  We are updating and testing the latest verison which is described in the above paper.  

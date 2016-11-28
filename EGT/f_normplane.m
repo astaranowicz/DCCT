@@ -54,4 +54,4 @@ A = [ zeros(1,3) 1; X1o'; X2o' ];
     plane = f_skew(X1)*X2;
 %     plane = plane/norm(plane);
 % end;
-    %%
+    
