@@ -1,4 +1,6 @@
 # DCCT
+Depth-Camera Calibration Toolbox (DCCT)
+
 RGB-D Calibration ToolBox
 
 
@@ -16,9 +18,11 @@ Conference Version:
 A. Staranowicz, G.R. Brown, F. Morbidi, and G.L. Mariottini. Easyto-Use and Accurate Calibration of RGB-D Cameras from Spheres. In R. Klette, M. Rivera, and S. Satoh, editors, Proc. 6th Pacific-Rim Symposium on Image and Video Technology, volume 8333, pages 265–278. Springer, 2014. 
 
 %%%%%%%%%%%
+
 Please note that the feature selection is not user-friendly.  We are updating and testing the latest verison which is described in the above paper.  
 
 For testing purposes, this toolbox was used to generate all estimated calibration parameters used in the above paper for our method, however, there might be some bugs in this toolbox which could lead to inaccurate calibration parameters.  To ensure an accurate calibration, select the ellipses very carefully.
+
 %%%%%%%%%%%
 
 Authors’ Contact Information:
