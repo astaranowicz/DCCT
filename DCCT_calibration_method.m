@@ -39,13 +39,13 @@ end
 %% NLS
 display('Nonlinear Minimization Phase')
 display('6pnt Nonlinear Least Squares')
-Switch = 0; % 0 for weighted and 1 for non-weighted
+Switch = 1; % 0 for weighted and 1 for non-weighted
 Switch2 = 1; % 0 to minimize Kr,Dr,R,t and 1 to minimise Kr,Dr,Kd,Dt,R,t
 [Kd_C,Dd_C,R_C,t_C,Kr_C,Dr_C,RESNLS,inliers_6pnt_NLS] = f_sixPointConstraintFit2Points(Kd_hat, DCCT_variables.Dd, R_hat, t_hat,DCCT_variables.Kr,DCCT_variables.Dr, U_depth_inl(guessInliers(Inliers_6pnt)),...
     projected_sphere_center_RGB(guessInliers(Inliers_6pnt)),Ellipse_RGB(guessInliers(Inliers_6pnt)),Switch,Switch2);
 
 display('Quadric Nonlinear Least Squares')
-Switch = 1; % 0 for Kd,Dd,R,t and 1 for Kd,Dd
+Switch = 0; % 0 for Kd,Dd,R,t and 1 for Kd,Dd
 [Kd_C2,Dd_C2,R_C2,t_C2,RES_NLS] = f_QuadricNLS(Kd_C, Dd_C, Kr_C, Dr_C, Ellipse_RGB(guessInliers(Inliers_6pnt)),R_C,t_C,...
     U_depth_inl(guessInliers(Inliers_6pnt)),Switch);
 
@@ -79,7 +79,7 @@ Projected_Conic = f_Quadric2Conic(U_depth_inl,Kd_D2,Dd_D2,Kr_D2,Dr_D2,R_D2,t_D2)
 
 fprintf(2,'Distortion vectors estimation might not be accurate yet!\n')
 fprintf(2,'If you are willing to address the accuracy issue:\n')
-fprintf(2,'Kindly revise lines using the `f_undistort` function.\n')
+fprintf(2,'Kindly revise lines using the `f_distort` and `f_normalize` functions.\n')
 fprintf(2,'Your efforts are highly appreciated!\n')
 display(' ')
 display(' ')

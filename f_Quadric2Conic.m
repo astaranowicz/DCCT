@@ -27,13 +27,12 @@ end
 P = Kr*[R t];
 for i = 1:length(U_depth)
     % Quadric
-    Q = [eye(3) -centerSphere_hat(i).center;
-        -centerSphere_hat(i).center'  centerSphere_hat(i).center'*centerSphere_hat(i).center-radius_hat(i)^2];
+    XYZ = centerSphere_hat(i).center;
+    XYZ = f_distort(XYZ, Dr);
+    Q = [eye(3) -XYZ;
+        -XYZ'  XYZ'*XYZ-radius_hat(i)^2];
     
-    invQPt = inv(Q)*P';
-    invQPt(1:3,:) = f_undistort(invQPt(1:3,:) ./ invQPt(4,:), Dr) .* invQPt(4,:); %TODO: Sometimes generates complex numbers
-    
-    Conic(i).conic = inv(P*invQPt);
+    Conic(i).conic = inv(P*inv(Q)*P');
 end
 
 

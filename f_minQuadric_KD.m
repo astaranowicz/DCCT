@@ -57,13 +57,12 @@ toleranceForImConic = 1;
 %% Cost function using ||C*-PQ*P||
 for i = 1:length(U_depth_NLS)
     % Depth camera - Conic
-    Q = [eye(3) -centerSphere_hat(i).center;
-        -centerSphere_hat(i).center'  centerSphere_hat(i).center'*centerSphere_hat(i).center-radius_hat(i)^2];
+    XYZ = centerSphere_hat(i).center;
+    XYZ = f_distort(XYZ, Dr_NLS);
+    Q = [eye(3) -XYZ;
+        -XYZ'  XYZ'*XYZ-radius_hat(i)^2];
     
-    invQPt = inv(Q) * R_H_D' * Kr_NLS';
-    invQPt(1:3,:) = f_undistort(invQPt(1:3,:) ./ invQPt(4,:), Dr_NLS) .* invQPt(4,:);
-    
-    temp_Conic = inv(Kr_NLS * R_H_D * invQPt);
+    temp_Conic = inv(Kr_NLS * R_H_D * inv(Q) * R_H_D' * Kr_NLS');
     
     conic_RGB = f_param2Conic_Ellipse(Conic_RGB_NLS(i).t(1),Conic_RGB_NLS(i).t(2),Conic_RGB_NLS(i).a,Conic_RGB_NLS(i).b,Conic_RGB_NLS(i).alpha);
     

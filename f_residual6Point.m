@@ -43,7 +43,7 @@ X_depth = f_depth2XYZ(Kd,Dd,centersOfSphere);
 %Uses the original 6pnt algorithm: ||u_r - Kr[R t]X_d||
 for i = 1:length(centersOfSphere)
     XYZ = X_depth(1:3,i);
-    XYZ = f_undistort(XYZ, Dr);
+    XYZ = f_distort(XYZ, Dr);
     X_depth_temp = temp_KrRt * [XYZ;1];
     U_depth(:,i) = X_depth_temp / X_depth_temp(3);
     residual(i) = norm([pixelCenter(:,i);1] - U_depth(:,i));

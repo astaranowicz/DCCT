@@ -20,7 +20,7 @@ Z = ud(3,:);
 ud_bar = [u.*Z;v.*Z;Z;ones(1,length(ud(1,:)))];
 
 XYZ = Pd * ud_bar;
-XYZ(1:3,:) = f_undistort(XYZ(1:3,:), Dd);
+XYZ(1:3,:) = f_normalize(XYZ(1:3,:), Dd);
 
 end
 

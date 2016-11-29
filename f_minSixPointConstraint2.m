@@ -67,7 +67,7 @@ W = 1- exp(-N.^2);
 if Switch_NLS
     for i = 1:length(U_depth_NLS)
         XYZ = centerSphere_hat(i).center;
-        XYZ = f_undistort(XYZ, Dr);
+        XYZ = f_distort(XYZ, Dr);
         U_depth_temp = Kr*[R t] *[XYZ;1];
         U_depth_temp = U_depth_temp ./ U_depth_temp(3); 
         dist_6pnt(i) = norm([ProjectedCenter_camera(i).point;1] - U_depth_temp);
@@ -75,7 +75,7 @@ if Switch_NLS
 else
     for i = 1:length(U_depth_NLS)
         XYZ = centerSphere_hat(i).center;
-        XYZ = f_undistort(XYZ, Dr);
+        XYZ = f_distort(XYZ, Dr);
         U_depth_temp = Kr*[R t] *[XYZ;1];
         U_depth_temp = U_depth_temp ./ U_depth_temp(3);
         dist_6pnt(i) = norm([ProjectedCenter_camera(i).point;1] - U_depth_temp)*W(i);

@@ -16,7 +16,7 @@
 function M = f_6pntalgorithmKd(R_U, D_m, Kr, Dr)
 
 XYZ = inv(Kr)*[R_U; ones(1, length(R_U(1,:)))];
-XYZ = f_undistort(XYZ, Dr); %TODO: Not necessary at this phase
+XYZ = f_distort(XYZ, Dr); %TODO: Not necessary at this phase
 
 A=[];
 S=[];
