@@ -4,4 +4,5 @@ Depth-Camera Calibration Toolbox (DCCT)
 RGB-D Calibration ToolBox
 
 
-See Branch v1.1
+ Branch v1.1 - original code
+ Branch v1.2 - updated
