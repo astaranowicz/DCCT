@@ -16,6 +16,23 @@ Aaron N. Staranowicz, Garrett R. Brown, Fabio Morbidi, Gian-Luca Mariottini, Pra
 Conference Version:
 
 A. Staranowicz, G.R. Brown, F. Morbidi, and G.L. Mariottini. Easyto-Use and Accurate Calibration of RGB-D Cameras from Spheres. In R. Klette, M. Rivera, and S. Satoh, editors, Proc. 6th Pacific-Rim Symposium on Image and Video Technology, volume 8333, pages 265–278. Springer, 2014. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Copyright (C) 2016 Aaron Staranowicz and Gian Luca Mariottini
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 %%%%%%%%%%%
 
