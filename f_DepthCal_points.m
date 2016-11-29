@@ -7,7 +7,8 @@
 %
 % Input - pixelCenter - center of sphere from RGB camera in pixel
 %         centersOfSphere - center of sphere from Depth Map in pixel
-%         Kr - camera calibration of the RGB camera
+%         Kr - camera calibration matrix of the RGB camera
+%         Dr - camera distortion vector of the RGB camera
 %         threshold_Res6pnt - threshold for the residuals used to pick the
 %                             inliers
 %
@@ -21,20 +22,20 @@
 %
 %%
 
-function [Kd_est, R_est, t_est,Res,inlier_indicies] = f_DepthCal_points(pixelCenter,centersOfSphere,Kr,threshold_Res6pnt)
+function [Kd_est, R_est, t_est,Res,inlier_indicies] = f_DepthCal_points(pixelCenter,centersOfSphere,Kr,Dr,threshold_Res6pnt)
 
 sampleSize = 6; %minimal number of points needed for the DLT algorithm (6point)
 maxDataTrials = 500; %number of trials of trying to find a non-degenerate model before the code exits
 maxTrials = 1000; %number of trials before the code exits
 
 %RANSAC to find the best spheres to estimate the model
-[AA, inlier_indicies, outlier_indicies] = f_ransac_6Pnt(pixelCenter, centersOfSphere,Kr, ...
+[AA, inlier_indicies, outlier_indicies] = f_ransac_6Pnt(pixelCenter, centersOfSphere,Kr,Dr, ...
     @f_6pntalgorithmKd, @f_residual6Point, sampleSize, threshold_Res6pnt,maxDataTrials, maxTrials);
 
 %Linear Least Squares (DLT) to find the estimated Kd from the set of inliers
-M= f_6pntalgorithmKd(pixelCenter(:,inlier_indicies), centersOfSphere(:,inlier_indicies), Kr);
+M= f_6pntalgorithmKd(pixelCenter(:,inlier_indicies), centersOfSphere(:,inlier_indicies), Kr, Dr);
 %Calculate the Residual based on the inliers and best-fit model
-[AA, BB, CC, Res] = f_residual6Point(M,pixelCenter(:,inlier_indicies), centersOfSphere(:,inlier_indicies),Kr, threshold_Res6pnt);
+[AA, BB, CC, Res] = f_residual6Point(M,pixelCenter(:,inlier_indicies), centersOfSphere(:,inlier_indicies),Kr, Dr, threshold_Res6pnt);
 
 Kd_est =M.Kd;
 R_est = M.R;

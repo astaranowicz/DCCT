@@ -23,7 +23,7 @@ end
 display('Least Squares Phase')
 guessInliers = DCCT_variables.setOfSpheres;
 [Kd_hat, R_hat, t_hat, res_6pnt_avgcenter, Inliers_6pnt] = ...
-    f_DepthCal_points([projected_sphere_center_RGB(guessInliers).points], avg_depthPixelPoints(:,guessInliers), DCCT_variables.Kr, DCCT_variables.threshold_Res6pnt);
+    f_DepthCal_points([projected_sphere_center_RGB(guessInliers).points], avg_depthPixelPoints(:,guessInliers), DCCT_variables.Kr, DCCT_variables.Dr, DCCT_variables.threshold_Res6pnt);
 
 
 %% 2) SphereFit (w/ est Kd) --> inliers_pnts(j)
@@ -39,8 +39,8 @@ end
 %% NLS
 display('Nonlinear Minimization Phase')
 display('6pnt Nonlinear Least Squares')
-Switch = 1; % 0 for weighted and 1 for non-weighted
-Switch2 = 1; % 0 to minimize Kr,R,t and 1 to minimise Kd,R,t
+Switch = 0; % 0 for weighted and 1 for non-weighted
+Switch2 = 1; % 0 to minimize Kr,Dr,R,t and 1 to minimise Kr,Dr,Kd,Dt,R,t
 [Kd_C,Dd_C,R_C,t_C,Kr_C,Dr_C,RESNLS,inliers_6pnt_NLS] = f_sixPointConstraintFit2Points(Kd_hat, DCCT_variables.Dd, R_hat, t_hat,DCCT_variables.Kr,DCCT_variables.Dr, U_depth_inl(guessInliers(Inliers_6pnt)),...
     projected_sphere_center_RGB(guessInliers(Inliers_6pnt)),Ellipse_RGB(guessInliers(Inliers_6pnt)),Switch,Switch2);
 
@@ -79,7 +79,7 @@ Projected_Conic = f_Quadric2Conic(U_depth_inl,Kd_D2,Dd_D2,Kr_D2,Dr_D2,R_D2,t_D2)
 
 fprintf(2,'Distortion vectors estimation might not be accurate yet!\n')
 fprintf(2,'If you are willing to address the accuracy issue:\n')
-fprintf(2,'Kindly implement/revise the regions indicated by the `TODO` comments.\n')
+fprintf(2,'Kindly revise lines using the `f_undistort` function.\n')
 fprintf(2,'Your efforts are highly appreciated!\n')
 display(' ')
 display(' ')

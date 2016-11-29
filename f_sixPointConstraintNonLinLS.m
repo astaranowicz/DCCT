@@ -11,8 +11,8 @@
 %        U_camera - pixel points of the contour of the sphere in the camera
 %        Switch - 0 for weighted cost function
 %                 1 for non-weighted cost function
-%        Switch2 - 1 for minimizing Kd,Dd,R,t
-%                  0 for minimizing R,t
+%        Switch2 - 1 for minimizing Kr,Dr,Kd,Dd,R,t
+%                  0 for minimizing Kr,Dr,R,t
 %
 %
 %Output - Kd_est  - estimated Depth camera calibration matrix
@@ -73,14 +73,8 @@ tz = t(3);
 if Switch2 == 1
     X = [fu_d; fv_d; u0_d; v0_d; skew_d; k1_d;k2_d;k3_d;k4_d;k5_d; tx; ty; tz; roll_est; pitch_est;yaw_est; fu_r; fv_r; u0_r; v0_r;skew_r; k1_r;k2_r;k3_r;k4_r;k5_r];
     %     X = [fu_d; fv_d; u0_d; v0_d; skew_d; k1_d;k2_d;k3_d;k4_d;k5_d ;tx; ty; tz; roll_est; pitch_est;yaw_est];
-    
-    if ~isempty(strfind(version,'2011'))
-        options = optimset('Algorithm','levenberg-marquardt','TolX',1e-6,'TolFun',1e-6,  ...
-            'Jacobian','off','MaxIter',400,'MaxFunEvals',700,'Display','iter');
-    else
-        options = optimset('Algorithm','levenberg-marquardt','TolX',1e-6,'TolFun',1e-6,  ...
-            'Jacobian','off','MaxIter',400,'MaxFunEvals',700,'Display','iter');
-    end
+	options = optimset('Algorithm','levenberg-marquardt','TolX',1e-6,'TolFun',1e-6,  ...
+		'Jacobian','off','MaxIter',400,'MaxFunEvals',700,'Display','iter');    
     
     lb = [];
     ub = [];
@@ -106,14 +100,9 @@ if Switch2 == 1
 else
     
     X = [tx; ty; tz; roll_est; pitch_est;yaw_est;fu_r; fv_r; u0_r; v0_r;skew_r; k1_r;k2_r;k3_r;k4_r;k5_r];
-    
-    if ~isempty(strfind(version,'2011'))
-        options = optimset('Algorithm','levenberg-marquardt','TolX',1e-6,'TolFun',1e-6,  ...
-            'Jacobian','off','MaxIter',400,'MaxFunEvals',700,'Display','iter');
-    else
-        options = optimset('Algorithm','levenberg-marquardt','TolX',1e-6,'TolFun',1e-6,  ...
-            'Jacobian','off','MaxIter',400,'MaxFunEvals',700,'Display','iter');
-    end
+	options = optimset('Algorithm','levenberg-marquardt','TolX',1e-6,'TolFun',1e-6,  ...
+		'Jacobian','off','MaxIter',400,'MaxFunEvals',700,'Display','iter');
+
     
     lb = [];
     ub = [];

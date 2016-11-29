@@ -49,13 +49,18 @@ W = 1- exp(-N.^2);
 
 toleranceForImConic = 1e-6;
 %% Cost function using ||C*-PQ*P||
+
+try
+
 for i = 1:length(U_depth_NLS)
     %Depth Camera Conic
     Q = [eye(3) -centerSphere_hat(i).center;
         -centerSphere_hat(i).center'  centerSphere_hat(i).center'*centerSphere_hat(i).center-radius_hat(i)^2];
     
-    %TODO: Utilize Dr_NLS
-    temp_Conic = inv(Kr_NLS * R_H_D * inv(Q) * R_H_D' * Kr_NLS');
+    invQPt = inv(Q) * R_H_D' * Kr_NLS';
+    invQPt(1:3,:) = f_undistort(invQPt(1:3,:) ./ invQPt(4,:), Dr_NLS) .* invQPt(4,:);
+
+    temp_Conic = inv(Kr_NLS * R_H_D * invQPt);
     [x_t,y_t,a_t,b_t,alpha_t] = f_conic2Param(temp_Conic,toleranceForImConic);
     %alpha_t is in radians
     theta_t = alpha_t;%*180/pi;
@@ -78,6 +83,14 @@ for i = 1:length(U_depth_NLS)
 %         f_plot_conicwparams(a_t,b_t, x_t,y_t, theta_t, 'k')
 % %     end
     
+end
+
+catch
+	%TODO: Can you fix that?
+	fprintf(2,'Optmization failed due to complex numbers in the conic parameters.\n')
+	fprintf(2,'This is caused by the f_undistort function in this file\n')
+	fprintf(2,'Terminating ...\n\n')
+	return;
 end
 
 F = temp_f;

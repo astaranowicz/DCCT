@@ -15,8 +15,8 @@
 %        U_camera - pixel points of the projected sphere center
 %        Switch - 0 for weighted cost function
 %                 1 for non-weighted cost function
-%        Switch2 - 1 for minimizing Kd,R,t
-%                  0 for minimizing R,t
+%        Switch2 - 1 for minimizing Kr,Dr,Kd,Dt,R,t
+%                  0 for minimizing Kr,Dr,R,t
 %
 %
 %Output - bestKd - Depth camera calibration matrix

@@ -21,9 +21,8 @@ function sphere_center = f_projectionSphere(x0, y0, a, b, alpha, K_camera, D_cam
 %To find the ratio of R/C to be used to find the sphere projected center
 gamma_r = f_findRatioR_C(x0, y0, a, b, alpha, K_camera, D_camera, tolerance);
 
-%TODO: Utilize D_camera
-
 %The center of the projected sphere in the camera frame
+%TODO: Utilize D_camera
 u = x0 * (1 - gamma_r(1)) + K_camera(1,3) * gamma_r(1);
 v = y0 * (1 - gamma_r(2)) + K_camera(2,3) * gamma_r(2);
 

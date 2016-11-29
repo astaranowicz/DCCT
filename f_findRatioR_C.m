@@ -23,8 +23,6 @@
 
 function  gamma_r = f_findRatioR_C(x0,y0,a,b,alpha, K_camera, D_camera, tolerance)
 
-%TODO: Utilize D_camera
-
 %Converts the Parametric form to the Conic
 Conic = f_param2Conic_Ellipse(x0,y0,a,b,alpha);
 % Conic = Conic/Conic(1,1);
@@ -41,6 +39,7 @@ u0 = K_camera(1,3);
 v0 = K_camera(2,3);
 fu = K_camera(1,1);
 fv = K_camera(2,2);
+%TODO: Utilize D_camera
 % When C_star13 == u0 or when C_star23 == v0
 if (abs((C_star13/C_star33)-u0) < tolerance) && (abs((C_star23/C_star33)-v0) > tolerance)    
     gamma_r(1) = 1;

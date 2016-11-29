@@ -66,13 +66,17 @@ W = 1- exp(-N.^2);
 %%1 = non Weighted, 0 =  Weighted
 if Switch_NLS
     for i = 1:length(U_depth_NLS)
-        U_depth_temp = Kr*[R t] *[centerSphere_hat(i).center;1];
+        XYZ = centerSphere_hat(i).center;
+        XYZ = f_undistort(XYZ, Dr);
+        U_depth_temp = Kr*[R t] *[XYZ;1];
         U_depth_temp = U_depth_temp ./ U_depth_temp(3); 
         dist_6pnt(i) = norm([ProjectedCenter_camera(i).point;1] - U_depth_temp);
     end
 else
     for i = 1:length(U_depth_NLS)
-        U_depth_temp = Kr*[R t] *[centerSphere_hat(i).center;1];
+        XYZ = centerSphere_hat(i).center;
+        XYZ = f_undistort(XYZ, Dr);
+        U_depth_temp = Kr*[R t] *[XYZ;1];
         U_depth_temp = U_depth_temp ./ U_depth_temp(3);
         dist_6pnt(i) = norm([ProjectedCenter_camera(i).point;1] - U_depth_temp)*W(i);
         

@@ -2,7 +2,7 @@
 %
 % Usage:
 %
-% [M, inliers] = ransac(x, fittingfn, distfn, degenfn s, t, feedback, ...
+% [M, inliers] = ransac(x, x2, Kr, Dr, fittingfn, distfn, degenfn s, t, feedback, ...
 %                       maxDataTrials, maxTrials)
 %
 % Arguments:
@@ -10,11 +10,15 @@
 %                 It is assumed that x is of size [d x Npts]
 %                 where d is the dimensionality of the data and Npts is
 %                 the number of data points.
+%     x2        - Extended data sets which constrains the model M
+%                 (TODO: Is this a correct description of the centersOfSphere param?)
+%     Kr        - RGB camera calibration matrix
+%     Dr        - RGB camera distortion vector
 %
 %     fittingfn - Handle to a function that fits a model to s
 %                 data from x.  It is assumed that the function is of the
 %                 form: 
-%                    M = fittingfn(x)
+%                    M = fittingfn(x,x2,Kr,Dr)
 %                 Note it is possible that the fitting function can return
 %                 multiple models (for example up to 3 fundamental matrices
 %                 can be fitted to 7 matched points).  In this case it is
@@ -26,7 +30,7 @@
 %     distfn    - Handle to a function that evaluates the
 %                 distances from the model to data x.
 %                 It is assumed that the function is of the form:
-%                    [inliers, M] = distfn(M, x, t)
+%                    [inliers, M] = distfn(M, x, x2, Kr, Dr, t)
 %                 This function must evaluate the distances between points
 %                 and the model returning the indices of elements in x that
 %                 are inliers, that is, the points that are within distance
@@ -110,7 +114,7 @@
 % December 2008 - Octave compatibility mods
 % June     2009 - Argument 'MaxTrials' corrected to 'maxTrials'!
 
-function [M, inliers_out, outliers_out] = f_ransac_6Pnt(x,x2,Kr, fittingfn, distfn, s, t,maxDataTrials, maxTrials)
+function [M, inliers_out, outliers_out] = f_ransac_6Pnt(x,x2,Kr,Dr, fittingfn, distfn, s, t,maxDataTrials, maxTrials)
     %%%%%%
     extra_counter = 0;
     %%%%%%
@@ -141,7 +145,7 @@ function [M, inliers_out, outliers_out] = f_ransac_6Pnt(x,x2,Kr, fittingfn, dist
                 % Fit model to this random selection of data points.
                 % Note that M may represent a set of models that fit the data in
                 % this case M will be a cell array of models
-                M = feval(fittingfn, x(:,ind),x2(:,ind),Kr);
+                M = feval(fittingfn, x(:,ind),x2(:,ind),Kr,Dr);
                 % Depending on your problem it might be that the only way you
                 % can determine whether a data set is degenerate or not is to
                 % try to fit a model and see if it succeeds.  If it fails we
@@ -165,7 +169,7 @@ function [M, inliers_out, outliers_out] = f_ransac_6Pnt(x,x2,Kr, fittingfn, dist
         % array of possible models 'distfn' will return the model that has
         % the most inliers.  After this call M will be a non-cell object
         % representing only one model.
-        [inliers, M, outliers,AA] = feval(distfn, M, x, x2, Kr, t);
+        [inliers, M, outliers,AA] = feval(distfn, M, x, x2, Kr, Dr, t);
         
         
         % Find the number of inliers to this model.

@@ -24,14 +24,16 @@ for i = 1:length(U_depth)
     radius_hat(i) = M(4);
 end
 
-%TODO: Utilize Dr
 P = Kr*[R t];
 for i = 1:length(U_depth)
     % Quadric
     Q = [eye(3) -centerSphere_hat(i).center;
         -centerSphere_hat(i).center'  centerSphere_hat(i).center'*centerSphere_hat(i).center-radius_hat(i)^2];
     
-    Conic(i).conic = inv(P*inv(Q)*P');
+    invQPt = inv(Q)*P';
+    invQPt(1:3,:) = f_undistort(invQPt(1:3,:) ./ invQPt(4,:), Dr) .* invQPt(4,:); %TODO: Sometimes generates complex numbers
+    
+    Conic(i).conic = inv(P*invQPt);
 end
 
 

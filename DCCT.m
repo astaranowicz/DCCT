@@ -16,17 +16,17 @@ clear all
 close all
 clc
 
-display('DCCT Options:')
-display('1: Load/Run Sample Data (over 50 sphere images)')
-display('2: Load/Run User-input Data')
-userInput = input('Select an option (default [any other key] exits): ');
-
 global DCCT_variables
 run DCCT_variables_SetupScript
 
+display('DCCT Options:')
+display(['1: Load/Run Sample Data (', num2str(length(DCCT_variables.setOfSpheres)), ' sphere images)'])
+display('2: Load/Run User-input Data')
+userInput = input('Select an option (default [any other key] exits): ');
+
 if userInput == 1
     clc
-    display('Running Sample Data (over 50 sphere images)')
+    display(['Running Sample Data (', num2str(length(DCCT_variables.setOfSpheres)), ' sphere images)'])
     DCCT_calibration_method(1);
     
 elseif userInput ==2

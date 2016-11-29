@@ -26,9 +26,10 @@ centerSphere_hat.center = M(1:3);
 radiusSphere_hat = M(4);
 
 % Cost function that calculates the residual
-%TODO: Utilize Dr
 R_P_D = Kr*[R t];
-U_temp = R_P_D * [centerSphere_hat.center;1];
+XYZ = centerSphere_hat.center;
+XYZ = f_undistort(XYZ, Dr);
+U_temp = R_P_D * [XYZ;1];
 U_temp = U_temp/U_temp(3);
 err = [projectedCenter_r.points;1] - U_temp;
 

@@ -61,13 +61,8 @@ tz = t_hat(3);
 if Switch == 0,
     
     X = [roll_est;pitch_est;yaw_est;tx;ty;tz;fu_d;fv_d;u0_d;v0_d;skew_d; k1_d;k2_d;k3_d;k4_d;k5_d];
-    if ~isempty(strfind(version,'2011'))
     options = optimset('Algorithm','levenberg-marquardt','TolX',1e-6,'TolFun',1e-6,  ...
         'Jacobian','off','MaxIter',400,'MaxFunEvals',700,'Display','iter');
-    else 
-options = optimset('Algorithm','levenberg-marquardt','TolX',1e-6,'TolFun',1e-6,  ...
-        'Jacobian','off','MaxIter',400,'MaxFunEvals',700,'Display','iter');
-    end
     
     lb = [];
     ub = [];
@@ -86,15 +81,9 @@ options = optimset('Algorithm','levenberg-marquardt','TolX',1e-6,'TolFun',1e-6, 
     
 else
     
-    X = [fu_d;fv_d;u0_d;v0_d;skew_d; k1_d;k2_d;k3_d;k4_d;k5_d];
-    
-    if ~isempty(strfind(version,'2011'))
+    X = [fu_d;fv_d;u0_d;v0_d;skew_d; k1_d;k2_d;k3_d;k4_d;k5_d];    
     options = optimset('Algorithm','levenberg-marquardt','TolX',1e-6,'TolFun',1e-6,  ...
         'Jacobian','off','MaxIter',400,'MaxFunEvals',700,'Display','iter');
-    else
-    options = optimset('Algorithm','levenberg-marquardt','TolX',1e-6,'TolFun',1e-6,  ...
-        'Jacobian','off','MaxIter',400,'MaxFunEvals',700,'Display','iter');
-    end
     
     lb = [];
     ub = [];

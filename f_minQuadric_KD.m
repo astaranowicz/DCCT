@@ -60,7 +60,10 @@ for i = 1:length(U_depth_NLS)
     Q = [eye(3) -centerSphere_hat(i).center;
         -centerSphere_hat(i).center'  centerSphere_hat(i).center'*centerSphere_hat(i).center-radius_hat(i)^2];
     
-    temp_Conic = inv(Kr_NLS * R_H_D * inv(Q) * R_H_D' * Kr_NLS');
+    invQPt = inv(Q) * R_H_D' * Kr_NLS';
+    invQPt(1:3,:) = f_undistort(invQPt(1:3,:) ./ invQPt(4,:), Dr_NLS) .* invQPt(4,:);
+    
+    temp_Conic = inv(Kr_NLS * R_H_D * invQPt);
     
     conic_RGB = f_param2Conic_Ellipse(Conic_RGB_NLS(i).t(1),Conic_RGB_NLS(i).t(2),Conic_RGB_NLS(i).a,Conic_RGB_NLS(i).b,Conic_RGB_NLS(i).alpha);
     
