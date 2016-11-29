@@ -10,7 +10,9 @@
 %                       camera
 %               Switch_NLS - for weighted or non-weighted cost function
 %               Kd_NLS - Depth camera calibraiton matrix
+%               Dd_NLS - Depth camera distortion matrix
 %               Kr_NLS - RGB camera calibration matrix
+%               Dr_NLS - RGB camera distortion matrix
 %
 %Output - F -  vector of residual from both cost functions
 %
@@ -22,10 +24,11 @@
 
 function  F = f_minSixPointConstraint2(X)
 
-global U_depth_NLS U_camera_spherecenter_NLS Switch_NLS Kd_NLS Kr_NLS Ellipse_C
+global U_depth_NLS U_camera_spherecenter_NLS Switch_NLS Kd_NLS Dd_NLS Kr_NLS Dr_NLS Ellipse_C
 
 % Depth camera Calibration matrix
 Kd  = Kd_NLS;
+Dd  = Dd_NLS;
 % translation R_D
 t = [X(1);X(2);X(3)];
 % rotation R_D
@@ -35,6 +38,7 @@ R = rotoz(X(4))*rotoy(X(5))*rotox(X(6));
 Kr = [X(7) X(11) X(9);
        0   X(8) X(10);
        0    0   1];
+% Dr = Dr_NLS;
 Dr = [X(12) X(13) X(14) X(15) X(16)];
    
 tolerance = 1e-8;

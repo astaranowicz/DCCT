@@ -40,12 +40,12 @@ end
 display('Nonlinear Minimization Phase')
 display('6pnt Nonlinear Least Squares')
 Switch = 1; % 0 for weighted and 1 for non-weighted
-Switch2 = 1; % 0 to minimize Kr,R,t and 1 to minimise Kd,Dd,R,t
+Switch2 = 1; % 0 to minimize Kr,R,t and 1 to minimise Kd,R,t
 [Kd_C,Dd_C,R_C,t_C,Kr_C,Dr_C,RESNLS,inliers_6pnt_NLS] = f_sixPointConstraintFit2Points(Kd_hat, DCCT_variables.Dd, R_hat, t_hat,DCCT_variables.Kr,DCCT_variables.Dr, U_depth_inl(guessInliers(Inliers_6pnt)),...
     projected_sphere_center_RGB(guessInliers(Inliers_6pnt)),Ellipse_RGB(guessInliers(Inliers_6pnt)),Switch,Switch2);
 
 display('Quadric Nonlinear Least Squares')
-Switch = 1; % 0 for Kd,R,t and 1 for Kd
+Switch = 1; % 0 for Kd,Dd,R,t and 1 for Kd,Dd
 [Kd_C2,Dd_C2,R_C2,t_C2,RES_NLS] = f_QuadricNLS(Kd_C, Dd_C, Kr_C, Dr_C, Ellipse_RGB(guessInliers(Inliers_6pnt)),R_C,t_C,...
     U_depth_inl(guessInliers(Inliers_6pnt)),Switch);
 
@@ -77,10 +77,10 @@ stdErr = std(err);
 %% Displays the Projected Conic
 Projected_Conic = f_Quadric2Conic(U_depth_inl,Kd_D2,Dd_D2,Kr_D2,Dr_D2,R_D2,t_D2);
 
-fprintf(2,'Distortion vectors estimation is not implemented yet!\n')
-fprintf(2,'If you are willing to address the distortion issue:\n')
-fprintf(2,'Kindly implement the missing routines indicated by the `TODO` comments.\n')
-fprintf(2,'Your kind efforts are highly appreciated!\n')
+fprintf(2,'Distortion vectors estimation might not be accurate yet!\n')
+fprintf(2,'If you are willing to address the accuracy issue:\n')
+fprintf(2,'Kindly implement/revise the regions indicated by the `TODO` comments.\n')
+fprintf(2,'Your efforts are highly appreciated!\n')
 display(' ')
 display(' ')
 display('Depth sensor calibration matrix')
@@ -105,7 +105,7 @@ if ~isempty(strfind(userSaveRes,'n'))
     display('Not saving');
 else
     display('Saving');
-    save('CalibrationResults','Kd_C2','Kr_C','R_C2','t_C2','err');
+    save('CalibrationResults','Kd_C2','Dd_C2','Kr_C','Dr_C','R_C2','t_C2','err');
 
 	for i = DCCT_variables.setOfSpheres
 		selected_Conic = f_param2Conic_Ellipse(Ellipse_RGB(i).t(1),Ellipse_RGB(i).t(2),Ellipse_RGB(i).a,Ellipse_RGB(i).b,Ellipse_RGB(i).alpha);

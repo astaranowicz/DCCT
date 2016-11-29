@@ -3,7 +3,7 @@
 % paper to run.
 %%
 
-DCCT_variables.setOfSpheres = [1:25]; %Number of spheres considered
+DCCT_variables.setOfSpheres = [1:57]; %Number of spheres considered
 DCCT_variables.Kd = []; %Depth sensor calibration matrix
 DCCT_variables.Dd = zeros(1, 5); %Depth sensor distortion vector
 DCCT_variables.Kr = [525     0  319.5;

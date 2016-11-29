@@ -14,7 +14,7 @@
 function F = f_minQuadric(X)
 
 
-global U_depth_NLS Conic_RGB_NLS Kr_NLS Dr_NLS Kd_NLS Dd_NLS
+global U_depth_NLS Conic_RGB_NLS Kr_NLS Dr_NLS Kd_NLS Dd_NLS Dd_NLS
 
 % Depth camera calibration matrix
 Kd = [X(7) X(11)  X(9);

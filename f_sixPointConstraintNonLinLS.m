@@ -26,13 +26,15 @@
 
 function  [Kd_est,Dd_est,R_est,t_est,Kr_est,Dr_est,RESIDUAL] = f_sixPointConstraintNonLinLS(Kd, Dd, R, t, Kr, Dr, U_depth, U_camera_spherecenter,ellipse_camera, Switch, Switch2)
 
-global U_depth_NLS U_camera_spherecenter_NLS Switch_NLS  Kd_NLS Kr_NLS Ellipse_C
+global U_depth_NLS U_camera_spherecenter_NLS Switch_NLS  Kd_NLS Dd_NLS Kr_NLS Dr_NLS Ellipse_C
 
 Switch_NLS = Switch;
 Ellipse_C = ellipse_camera;
 U_depth_NLS = U_depth;
 Kd_NLS = Kd;
+Dd_NLS = Dd;
 Kr_NLS = Kr;
+Dr_NLS = Dr;
 U_camera_spherecenter_NLS = U_camera_spherecenter;
 
 fu_d = Kd(1,1);
