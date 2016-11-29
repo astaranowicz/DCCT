@@ -20,7 +20,7 @@ For testing purposes, this toolbox was used to generate all estimated calibratio
 
 Authors’ Contact Information:
 Aaron Staranowicz (Corresponding Author) and Gian-Luca Mariottini
-email:{aaron.staranowicz@mavs.uta.edu, gianluca@uta.edu}
+email:{aaron.staranowicz@gmail.com, gianluca@uta.edu}
 Dept. of Comp. Science and Eng., University of Texas at Arlington, Arlington, Texas
 
 
