@@ -1,12 +1,22 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Copyright (C) 2016 Aaron Staranowicz and Gian Luca Mariottini
+%
+%This program is free software: you can redistribute it and/or modify
+%it under the terms of the GNU General Public License as published by
+%the Free Software Foundation, either version 3 of the License, or
+%(at your option) any later version.
+%
+%This program is distributed in the hope that it will be useful,
+%but WITHOUT ANY WARRANTY; without even the implied warranty of
+%MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%GNU General Public License for more details.
+%
+%You should have received a copy of the GNU General Public License
+%along with this program.  If not, see <http://www.gnu.org/licenses/>
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %%
 % DCCT_toolbox v1.1
-% SUBMITTED: "Depth-Camera Calibration Toolbox (DCCT): accurate, robust, and
-% practical calibration of depth cameras"
-% Authors: Aaron Staranowicz, Fabio Morbidi, and Gian-Luca Mariottini
-% (WAFR) 2012
-%
-% Please see the README File
-%
 %%
 addpath('EGT_v2p0/')
 addpath('Data/')
