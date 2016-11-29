@@ -6,23 +6,25 @@ README FILE
 
 
 DCCT v.1.1 is a contribution that is part of the following paper:
+
 Journal Version:
+
 Aaron N. Staranowicz, Garrett R. Brown, Fabio Morbidi, Gian-Luca Mariottini, Practical and accurate calibration of RGB-D cameras using spheres, Computer Vision and Image Understanding, Available online 9 April 2015, ISSN 1077-3142, http://dx.doi.org/10.1016/j.cviu.2015.03.013.
+
 Conference Version:
+
 A. Staranowicz, G.R. Brown, F. Morbidi, and G.L. Mariottini. Easyto-Use and Accurate Calibration of RGB-D Cameras from Spheres. In R. Klette, M. Rivera, and S. Satoh, editors, Proc. 6th Pacific-Rim Symposium on Image and Video Technology, volume 8333, pages 265–278. Springer, 2014. 
 
 %%%%%%%%%%%
 Please note that the feature selection is not user-friendly.  We are updating and testing the latest verison which is described in the above paper.  
 
 For testing purposes, this toolbox was used to generate all estimated calibration parameters used in the above paper for our method, however, there might be some bugs in this toolbox which could lead to inaccurate calibration parameters.  To ensure an accurate calibration, select the ellipses very carefully.
-
 %%%%%%%%%%%
 
 Authors’ Contact Information:
 Aaron Staranowicz (Corresponding Author) and Gian-Luca Mariottini
 email:{aaron.staranowicz@gmail.com, gianluca@uta.edu}
 Dept. of Comp. Science and Eng., University of Texas at Arlington, Arlington, Texas
-
 
 Please note, this zipped file (DCCT_v1.zip) contains parts of the code used to generate the figures and results of our calibration algorithm and code that allows users to input their own data to calibrate a depth camera.  A newer code version will include a GUI for better usability. 
 
