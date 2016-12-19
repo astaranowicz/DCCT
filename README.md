@@ -7,7 +7,10 @@ RGB-D Calibration ToolBox
 README FILE
 
 
-DCCT v.1.1 is a contribution that is part of the following paper:
+DCCT v.1.2 is a contribution that is part of the following paper:
+
+Update at the bottom.
+
 
 Journal Version:
 
