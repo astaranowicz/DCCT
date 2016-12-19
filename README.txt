@@ -83,3 +83,12 @@ DCCT_variables_SetupScript.m is a set of default values used throughout the cali
 The data should be formatted in the following way:
 RGB images should be named RGBImage_ball_#.jpg
 Depth Maps should be named ball_#.txt (which includes the distance for each pixel in a column-wise vector which can be reshaped to match the RGB image.)
+
+
+UPDATE:
+
+The Lens Distortion parameters are calculated in the non-linear minimization step. There are several options that can be used to set which parameters are minimized or not. Lens distortion isn't that big of a player in the RGB-Depth cameras (in particular the Kinect, time-of-flight/RGB setups, etc.). The project isn't built with these files in mind, and needs to be added by the users.
+
+The main file is f_nonLinearMinization_6pnt_Conic.m which contains most of the non-linear minimization function.
+
+
