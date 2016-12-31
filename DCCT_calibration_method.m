@@ -45,7 +45,7 @@ Switch2 = 1; % 0 to minimize Kr,Dr,R,t and 1 to minimise Kr,Dr,Kd,Dt,R,t
     projected_sphere_center_RGB(guessInliers(Inliers_6pnt)),Ellipse_RGB(guessInliers(Inliers_6pnt)),Switch,Switch2);
 
 display('Quadric Nonlinear Least Squares')
-Switch = 1; % 0 for Kd,Dd,R,t and 1 for Kd,Dd
+Switch = 0; % 0 for Kd,Dd,R,t and 1 for Kd,Dd
 [Kd_C2,Dd_C2,R_C2,t_C2,RES_NLS] = f_QuadricNLS(Kd_C, Dd_C, Kr_C, Dr_C, Ellipse_RGB(guessInliers(Inliers_6pnt)),R_C,t_C,...
     U_depth_inl(guessInliers(Inliers_6pnt)),Switch);
 

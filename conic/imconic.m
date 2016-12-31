@@ -287,7 +287,7 @@ e = p(5);
 f = p(6);
 
 % use implicit equation to compute circle radius
-r = realsqrt((d^2+e^2)/(4*a^2)-f/a);
+r = sqrt((d^2+e^2)/(4*a^2)-f/a);
 
 function [z,grp] = imcirclepoints(r, t, zx, w)
 % Plot a circle given its explicit parameters.
@@ -327,9 +327,9 @@ g = p(6);
 
 % use implicit equation to compute ellipse semi-axes length
 q = 2*(a*f^2+c*d^2+g*b^2-2*b*d*f-a*c*g)/(b^2-a*c);
-r = realsqrt((a-c)^2+4*b^2);
-semi_a = realsqrt(q/(r-(a+c)));   % major axis
-semi_b = realsqrt(q/(-r-(a+c)));  % minor axis
+r = sqrt((a-c)^2+4*b^2);
+semi_a = sqrt(q/(r-(a+c)));   % major axis
+semi_b = sqrt(q/(-r-(a+c)));  % minor axis
 
 function [z,grp] = imellipsepoints(a, b, R, t, zx, w)
 % Plot an ellipse given its explicit parameters.
@@ -373,8 +373,8 @@ A_yy = p(3);
 
 % major and minor semi-axes
 lambda = roots([1, -(A_xx+A_yy), D]);  % lambda^2 - (A_xx + A_yy)*lambda + D = 0
-a = realsqrt(abs(Delta/(lambda(1)*D)));
-b = realsqrt(abs(Delta/(lambda(2)*D)));
+a = sqrt(abs(Delta/(lambda(1)*D)));
+b = sqrt(abs(Delta/(lambda(2)*D)));
 
 function [z,grp] = imhyperbolapoints(a, b, R, t, zx, w)
 % Plot a hyperbola given its explicit parameters.
