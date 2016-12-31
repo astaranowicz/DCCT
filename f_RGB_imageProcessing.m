@@ -7,7 +7,14 @@ function f_RGB_imageProcessing()
 global DCCT_variables
 
 try
-	load UserInput_RGB
+	load UserInput_RGB;
+
+	userProcessRes = lower(input('\n\nPrevious data exists! Do you want to start RGB processing anyway: y,n [y]:  ','s'));
+	if ~isempty(strfind(userProcessRes,'n'))
+		DCCT_variables.Ellipse_RGB = Ellipse_RGB;
+		DCCT_variables.projected_sphere_center_RGB = projected_sphere_center_RGB;
+		return
+	end
 catch
 	%Do nothing
 end
@@ -16,15 +23,19 @@ counter = 1;
 cannyThreshold_Image = DCCT_variables.cannyThreshold_Image;
 cannySigma_Image = DCCT_variables.cannySigma_Image;
 
+backup_circles = [];
 redo = false;
 show_circles = false;
 %img_scale = 0.5;
-colorDetector_enlargmentRatio = 0.3;
-
+colorDetector_enlargmentRatio = 0.1;
 while counter ~= length(DCCT_variables.setOfSpheres)+1
     
     i = DCCT_variables.setOfSpheres(counter);
     imageName = [DCCT_variables.dataPath, '/',DCCT_variables.RGBImageName,num2str(i),DCCT_variables.RGBFileExt];
+    if exist(imageName, 'file') ~= 2
+        counter = counter + 1;
+        continue 
+    end
     image = imread(imageName);
     figure(1)
     imshow(image)
@@ -37,15 +48,19 @@ while counter ~= length(DCCT_variables.setOfSpheres)+1
 			if ~redo
 				AA = imsubtract(image(:,:,1), rgb2gray(image));
 				AA = medfilt2(AA, [3 3]);
-				AA = im2bw(AA, 0.15);
-				AA = bwareaopen(AA,300);
-				AA = bwlabel(AA, 8);
-				stats = regionprops(AA, 'BoundingBox', 'Centroid');
+				AA_bin = im2bw(AA, 0.15);
+				AA_bin = bwareaopen(AA_bin,300);
+				AA_bin = bwlabel(AA_bin, 8);
+				stats = regionprops(AA_bin, 'BoundingBox', 'Centroid');
 				if length(stats) > 0
 					rect = stats(1).BoundingBox;
+					backup_circles = [rect(1) + 0.5 .* rect(3), rect(3) + 0.5 .* rect(4), sqrt((rect(3) - rect(1)).^2 + (rect(4) - rect(2)).^2), 0];
 					%Make it a little bigger
 					rect(1:2) = rect(1:2) - colorDetector_enlargmentRatio * rect(3:4);
 					rect(3:4) = (1 + 2 * colorDetector_enlargmentRatio) * rect(3:4);
+					
+					AA_bin = imcrop(AA_bin, rect);
+					AA = cat(3, AA_bin, AA_bin, AA_bin);
 				end
 			end
 			if redo || length(stats) == 0
@@ -53,16 +68,20 @@ while counter ~= length(DCCT_variables.setOfSpheres)+1
 				title(char(['RGB Image of sphere ', num2str(i)],['If you finished selecting the box, press enter']));
 				input('If you finished selecting the box, press enter','s');
 				rect = rectHandle.getPosition;
+				AA = imcrop(image, rect);
+				AA_bin = adaptivethreshold(AA, 15, 0.02, 0);
 			end
-			[AA,rect]= imcrop(image, rect);
 			rectangle('Position',rect,'EdgeColor', 'r')
 			%AA = imresize(AA, img_scale);
-			AA_bin = adaptivethreshold(AA, 15, 0.02, 1);
 			display('Please wait while detecting the RGB circle...');
 			circles = houghcircles(AA_bin,floor(0.35*size(AA_bin,1)), ceil(0.65*size(AA_bin,1)));
 			if size(circles, 1) == 0
 				AA_bin = rgb2gray(AA);
 				circles = houghcircles(AA_bin,floor(size(AA_bin,1)/2*.70), ceil(size(AA_bin,1)/2*1.30));
+			end
+			if size(circles, 1) == 0
+				circles = backup_circles;
+				rect = [0 0 640 480];
 			end
 			circles_count = size(circles, 1);
 			if circles_count == 0
@@ -199,17 +218,21 @@ while counter ~= length(DCCT_variables.setOfSpheres)+1
 		elseif opt == 'k'
 			Ellipse_RGB(i).b = Ellipse_RGB(i).b - key_speed_factor;
 		elseif opt == 'o'
-			Ellipse_RGB(i).alpha = Ellipse_RGB(i).alpha + degtorad(key_speed_factor);
+			Ellipse_RGB(i).alpha = Ellipse_RGB(i).alpha + key_speed_factor * pi / 180;
 		elseif opt == 'l'
-			Ellipse_RGB(i).alpha = Ellipse_RGB(i).alpha - degtorad(key_speed_factor);
+			Ellipse_RGB(i).alpha = Ellipse_RGB(i).alpha - key_speed_factor * pi / 180;
 		elseif opt == 'y' || opt == setstr(10) || opt == setstr(13)
 			cannyThreshold_Image = DCCT_variables.cannyThreshold_Image;
 			cannySigma_Image = DCCT_variables.cannySigma_Image;
 			show_circles = false;
 			redo = false;
+			backup_circles = [];
 
 			DCCT_variables.Ellipse_RGB(i) = Ellipse_RGB(i);
 			DCCT_variables.projected_sphere_center_RGB(i) = projected_sphere_center_RGB(i);
+			
+			save('tmpInput_RGB','Ellipse_RGB','projected_sphere_center_RGB');
+			
 			counter = counter + 1;
 			break;
 		elseif opt == 'n'
@@ -247,10 +270,3 @@ else
 end
 
 end
-
-
-
-
-
-
-

@@ -14,7 +14,7 @@ function XYZ = f_normalize(XYZ, D_camera);
 assert(size(XYZ, 1) == 3, 'f_normalize:DimensionMismatch', ...
     ['A parameter matrix of 3 rows is expected (', num2str(size(XYZ, 1)), ' received) for undistort function.']);
 
-XYZ(1:2,:) = XYZ(1:2,:) ./ XYZ(3,:); %Normalize
+XYZ(1:2,:) = XYZ(1:2,:) ./ (ones(2, 1) * XYZ(3,:)); %Normalize
 
 XY = XYZ(1:2,:);
 for i = 1:20 % Newton's Iteration
@@ -25,6 +25,6 @@ for i = 1:20 % Newton's Iteration
 	XY = (XYZ(1:2,:) - dt) ./ (ones(2, 1) * dr);
 end
 
-XYZ(1:2,:) = XY .* XYZ(3,:);
+XYZ(1:2,:) = XY .* (ones(2, 1) * XYZ(3,:));
 
 end

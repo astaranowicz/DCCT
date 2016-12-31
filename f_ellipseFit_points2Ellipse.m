@@ -17,11 +17,18 @@ function [x0,y0,a,b,alpha,phi, residual,outliers] = f_ellipseFit_points2Ellipse(
 % toleranceForRotation = 1e-5;
 sampleSize = 5; %number of points to describe an ellipse
 maxDataTrials = 400; %number of trials of trying to find a non-degenerate model before the code exits
-maxTrials = 100; %number of trials before the code exits
-inliers = [];
-while length(inliers) < sampleSize
-    %To pick the best fit to the number of points having no outliners
-    [AA, inliers,outliers] = f_ransac_Elp_Sph(Points, @f_ellipseFit2Conic2param, @f_ellipseResidual, sampleSize, threshold,maxDataTrials, maxTrials);
+maxTrials = 500; %number of trials before the code exits
+%To pick the best fit to the number of points having no outliners
+[~, inliers,outliers] = f_ransac_Elp_Sph(Points, @f_ellipseFit2Conic2param, @f_ellipseResidual, sampleSize, threshold,maxDataTrials, maxTrials);
+if length(inliers) < sampleSize
+    x0 = 320;
+    y0 = 240;
+    a = 100;
+    b = 100;
+    alpha = 0;
+    phi = 0;
+    residual = 0;
+    return
 end
 %Linear Least Squares to ensure the model is estimated correctly
 % [M,par] = f_ellipseLinLS(inliers);

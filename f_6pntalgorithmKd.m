@@ -22,7 +22,7 @@ A=[];
 S=[];
 %Builds the A matrix used in SVD
 for i=1:length(R_U(1,:)),
-    D_mZ(:,i) = [ D_m([1:2],i)*D_m(3,i); D_m(3,i); 1];
+    D_mZ(:,i) = [ D_m(1:2,i)*D_m(3,i); D_m(3,i); 1];
     A_add = [ zeros(1,4)                -D_mZ(:,i)'           XYZ(2,i)*D_mZ(:,i)' ;
         D_mZ(:,i)'                zeros(1,4)          -XYZ(1,i)*D_mZ(:,i)' ];
     

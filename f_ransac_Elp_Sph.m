@@ -190,16 +190,15 @@ function [M, inliers, outliers, indicies] = f_ransac_Elp_Sph(x, fittingfn, distf
         end
 
         
-        trialcount = trialcount+1;
+        trialcount = trialcount + 1;
         
         %%%%%% Added Extra code to give Ransac one more try before exiting
         %%%%%% with no model found
-        if (ninliers == 0) && (extra_counter == 0)
-           trialcount = 0;   
-           extra_counter = 1;
-        end
+        %if (ninliers == 0) && (extra_counter == 0)
+        %   trialcount = 0;   
+        %   extra_counter = 1;
+        %end
         %%%%%%
-       
 
         % Safeguard against being stuck in this loop forever
         if trialcount > maxTrials

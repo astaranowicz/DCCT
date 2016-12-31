@@ -33,6 +33,10 @@ D2 = [XY(:,1)-centroid(1), XY(:,2)-centroid(2), ones(size(XY,1),1)];
 S1 = D1'*D1;
 S2 = D1'*D2;
 S3 = D2'*D2;
+if abs(det(S3)) < 1e-6
+    A = [0 0 0 0 0 0];
+    return    
+end
 T = -inv(S3)*S2';
 M = S1 + S2*T;
 M = [M(3,:)./2; -M(2,:); M(1,:)./2];
